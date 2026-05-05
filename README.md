@@ -2,7 +2,7 @@
 
 台灣地震頻繁，SafeCard 讓你在瀏覽器填好資料後，直接列印成可放進避難包的小卡。
 
-**[立即使用 →](https://legendream.github.io/safecard/)**
+**[立即使用 →](https://safecard.claire-cheng.com/)**
 
 ---
 
