@@ -8,14 +8,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy:    #2C4A6E;
-      --navy-dk: #1E3450;
-      --blue:    #3B7DD8;
-      --blue-lt: #D0E4FA;
-      --text:    #1A2F45;
-      --mid:     #5A7A99;
-      --light:   #C8D8E8;
-      --bg:      #EFF3F8;
+      --navy:    #1C1917;
+      --navy-dk: #0C0A09;
+      --blue:    #C2410C;
+      --blue-lt: #FED7AA;
+      --text:    #1C1917;
+      --mid:     #78716C;
+      --light:   #D6D3D1;
+      --bg:      #FFF7ED;
       --white:   #ffffff;
       --font:    system-ui, 'Noto Sans TC', 'PingFang TC', sans-serif;
       --hw: 90mm; --hh: 54mm; --hs: 1.6;
@@ -32,8 +32,8 @@
     }
     .banner h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; }
     .privacy-notice {
-      background: rgba(59,125,216,0.18); border: 1px solid rgba(59,125,216,0.5);
-      color: #c8dff8; padding: 4px 14px; border-radius: 20px;
+      background: rgba(194,65,12,0.18); border: 1px solid rgba(194,65,12,0.4);
+      color: #fddfc4; padding: 4px 14px; border-radius: 20px;
       font-size: 0.75rem; margin-left: auto;
     }
 
@@ -91,11 +91,11 @@
       width: 100%; padding: 10px 10px; min-height: 44px;
       border: 1.5px solid var(--light); border-radius: 6px;
       font-family: var(--font); font-size: 0.86rem; color: var(--text);
-      background: #fafcff; transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fffaf7; transition: border-color 0.2s, box-shadow 0.2s;
     }
     .field input:focus, .field select:focus, .field textarea:focus {
       outline: none; border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(59,125,216,0.15);
+      box-shadow: 0 0 0 3px rgba(194,65,12,0.14);
     }
     .field textarea { resize: vertical; min-height: 48px; }
     .field-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
@@ -104,7 +104,7 @@
     /* 列印按鈕區 */
     .privacy-inline {
       margin-top: 18px; padding: 9px 13px;
-      background: var(--blue-lt); border-left: 3px solid var(--blue);
+      background: #fff1e6; border-left: 3px solid var(--blue);
       border-radius: 0 6px 6px 0; font-size: 0.75rem; color: var(--navy); line-height: 1.6;
     }
     .print-btn {
@@ -210,13 +210,29 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 5pt; color: #bbb; text-align: center;
       overflow: hidden; position: relative; cursor: move;
-      align-self: center;
+      align-self: flex-start;
     }
     .card-photo-box img {
       position: absolute; left: 50%; top: 50%;
       min-width: 100%; min-height: 100%; width: auto; height: auto; max-width: none;
       transform: translate(-50%, -50%); transform-origin: center; object-fit: none;
     }
+    /* 拖曳提示遮罩 */
+    .card-photo-box:has(img)::after,
+    .pet-photo:has(img)::after {
+      content: "拖曳移動\A 滾輪縮放";
+      white-space: pre; position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(28,25,23,0.62);
+      color: rgba(255,255,255,0.95);
+      font-size: 4.5pt; text-align: center;
+      padding: 1.5px 0 2px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.18s;
+    }
+    .card-photo-box:has(img):hover::after,
+    .pet-photo:has(img):hover::after { opacity: 1; }
+
     .pet-photo { cursor: move; position: relative; overflow: hidden; }
     .pet-photo img {
       position: absolute; left: 50%; top: 50%;
@@ -241,14 +257,18 @@
       display: flex; flex-direction: column; justify-content: flex-start; gap: 3mm; overflow: hidden;
     }
     .pet-section {
-      display: flex; flex-direction: column; gap: 0.8mm;
-      border-left: 2.5px solid var(--blue-lt); padding-left: 2mm;
+      display: flex; flex-direction: column; gap: 0mm;
     }
     .pet-section-title {
       font-size: 5.5pt; font-weight: 700; letter-spacing: 0.06em;
       color: var(--white); background: var(--navy);
       padding: 0.3mm 2mm; border-radius: 1.5px; display: inline-block;
-      text-transform: uppercase; margin-bottom: 0.8mm;
+      text-transform: uppercase; margin-bottom: 1mm;
+      align-self: flex-start;
+    }
+    .pet-section-rows {
+      border-left: 2.5px solid var(--blue-lt); padding-left: 2mm;
+      display: flex; flex-direction: column; gap: 0.8mm;
     }
     .pet-row { display: flex; align-items: baseline; gap: 1.5mm; font-size: 7pt; line-height: 1.3; }
     .pet-key { font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); min-width: 10mm; }
@@ -287,6 +307,7 @@
     /* ── 列印 ── */
     @media print {
       .no-print { display: none !important; }
+      .card-photo-box::after, .pet-photo::after { display: none !important; }
 
       @page { size: A4 portrait; margin: 10mm; }
       body { background: white; }
@@ -878,22 +899,26 @@
         </div>
         <div class="pet-section">
           <div class="pet-section-title">身份辨識</div>
-          <div class="pet-row">
-            <span class="pet-key">晶片</span>
-            <span class="pet-val">${PV(chip)} ${chipId ? `｜${chipId}` : ''}</span>
+          <div class="pet-section-rows">
+            <div class="pet-row">
+              <span class="pet-key">晶片</span>
+              <span class="pet-val">${PV(chip)} ${chipId ? `｜${chipId}` : ''}</span>
+            </div>
+            <div class="pet-row">
+              <span class="pet-key">名牌</span>
+              <span class="pet-val">${PV(tag)} ${tagDesc ? `｜${tagDesc}` : ''}</span>
+            </div>
+            ${R('其他特徵', idOther)}
           </div>
-          <div class="pet-row">
-            <span class="pet-key">名牌</span>
-            <span class="pet-val">${PV(tag)} ${tagDesc ? `｜${tagDesc}` : ''}</span>
-          </div>
-          ${R('其他特徵', idOther)}
         </div>
         <div class="pet-section">
           <div class="pet-section-title">用藥</div>
-          ${R('慢性病1', chronic)}
-          ${med1 ? `<div class="pet-row"><span class="pet-key">用藥1</span><span class="pet-val">${med1}${med1d?' ｜ '+med1d:''}</span></div>` : ''}
-          ${chronic2 ? R('慢性病2', chronic2) : ''}
-          ${med2 ? `<div class="pet-row"><span class="pet-key">用藥2</span><span class="pet-val">${med2}${med2d?' ｜ '+med2d:''}</span></div>` : ''}
+          <div class="pet-section-rows">
+            ${R('慢性病1', chronic)}
+            ${med1 ? `<div class="pet-row"><span class="pet-key">用藥1</span><span class="pet-val">${med1}${med1d?' ｜ '+med1d:''}</span></div>` : ''}
+            ${chronic2 ? R('慢性病2', chronic2) : ''}
+            ${med2 ? `<div class="pet-row"><span class="pet-key">用藥2</span><span class="pet-val">${med2}${med2d?' ｜ '+med2d:''}</span></div>` : ''}
+          </div>
         </div>
       </div>`;
   }
@@ -921,30 +946,37 @@
       <div class="pet-body">
         <div class="pet-section">
           <div class="pet-section-title">照顧者</div>
-          <div class="pet-row">
-            <span class="pet-key">姓名</span><span class="pet-val">${PV(owner)}</span>
-            <span class="pet-key" style="margin-left:2mm">電話</span><span class="pet-val">${PV(ownerTel)}</span>
+          <div class="pet-section-rows">
+            <div class="pet-row">
+              <span class="pet-key">姓名</span><span class="pet-val">${PV(owner)}</span>
+              <span class="pet-key" style="margin-left:2mm">電話</span><span class="pet-val">${PV(ownerTel)}</span>
+            </div>
+            ${R('聯絡', ownerContact)}
+            ${R('地址', ownerAddr)}
           </div>
-          ${R('聯絡', ownerContact)}
-          ${R('地址', ownerAddr)}
         </div>
         <div class="pet-section">
           <div class="pet-section-title">健康管理</div>
-          <div class="pet-row">
-            <span class="pet-key">絕育</span><span class="pet-val">${PV(neutered)}</span>
-            <span class="pet-key" style="margin-left:2mm">藥物過敏</span><span class="pet-val">${PV(drugAllergy,'無')}</span>
+          <div class="pet-section-rows">
+            <div class="pet-row">
+              <span class="pet-key">絕育</span><span class="pet-val">${PV(neutered)}</span>
+              <span class="pet-key" style="margin-left:2mm">藥物過敏</span><span class="pet-val">${PV(drugAllergy,'無')}</span>
+            </div>
+            <div class="pet-row"><span class="pet-key">疫苗1</span><span class="pet-val">${vac1 ? `${vac1}${fmt(vac1d)?' ｜ '+fmt(vac1d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
+            <div class="pet-row"><span class="pet-key">疫苗2</span><span class="pet-val">${vac2 ? `${vac2}${fmt(vac2d)?' ｜ '+fmt(vac2d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
           </div>
-          <div class="pet-row"><span class="pet-key">疫苗1</span><span class="pet-val">${vac1 ? `${vac1}${fmt(vac1d)?' ｜ '+fmt(vac1d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
-          <div class="pet-row"><span class="pet-key">疫苗2</span><span class="pet-val">${vac2 ? `${vac2}${fmt(vac2d)?' ｜ '+fmt(vac2d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
         </div>
         <div class="pet-section">
           <div class="pet-section-title">飲食</div>
-          <div class="pet-row"><span class="pet-key">${meal1t||'餐1'}</span><span class="pet-val">${PV(meal1d)}</span></div>
-          <div class="pet-row"><span class="pet-key">${meal2t||'餐2'}</span><span class="pet-val">${PV(meal2d)}</span></div>
-          ${R('注意', foodNote)}
+          <div class="pet-section-rows">
+            <div class="pet-row"><span class="pet-key">${meal1t||'餐1'}</span><span class="pet-val">${PV(meal1d)}</span></div>
+            <div class="pet-row"><span class="pet-key">${meal2t||'餐2'}</span><span class="pet-val">${PV(meal2d)}</span></div>
+            ${R('注意', foodNote)}
+          </div>
         </div>
         <div class="pet-section">
           <div class="pet-section-title">就診</div>
+          <div class="pet-section-rows">
           <div class="pet-row">
             <span class="pet-key">醫院</span><span class="pet-val">${PV(vetH)}</span>
             <span class="pet-key" style="margin-left:2mm">獸醫</span><span class="pet-val">${PV(vetN)}</span>
@@ -952,6 +984,7 @@
           <div class="pet-row">
             <span class="pet-key">電話</span><span class="pet-val">${PV(vetT)}</span>
             <span class="pet-key" style="margin-left:2mm">地址</span><span class="pet-val">${PV(vetA)}</span>
+          </div>
           </div>
         </div>
       </div>`;
@@ -973,15 +1006,32 @@
     if (!file) return;
     const reader = new FileReader();
     reader.onload = e => {
+      const dataUrl = e.target.result;
       if (type === 'human') {
-        humanPhoto = e.target.result;
-        humanXf = {x:0, y:0, s:1};   // 新照片重設位置
+        humanPhoto = dataUrl;
+        humanXf = {x:0, y:0, s:1};
         sync();
       } else {
-        petPhoto = e.target.result;
+        petPhoto = dataUrl;
         petXf = {x:0, y:0, s:1};
         syncPet();
       }
+      // 計算 cover-fit 初始縮放比例，讓照片上傳後即可看到完整畫面
+      const img = new Image();
+      img.onload = () => {
+        const boxSel = type === 'human'
+          ? '#preview-front .card-photo-box'
+          : '#preview-pet-front .pet-photo';
+        const box = document.querySelector(boxSel);
+        if (!box || !img.naturalWidth || !img.naturalHeight) return;
+        const bw = box.offsetWidth, bh = box.offsetHeight;
+        // cover-fit：最小需填滿框的縮放比例
+        const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight);
+        if (type === 'human') { humanXf.s = s; humanXf.minS = s; }
+        else                  { petXf.s   = s; petXf.minS   = s; }
+        reapplyXf();
+      };
+      img.src = dataUrl;
     };
     reader.readAsDataURL(file);
   }
@@ -1022,7 +1072,8 @@
     if (!img) return;
     e.preventDefault();
     const xf = box.classList.contains('card-photo-box') ? humanXf : petXf;
-    xf.s = Math.max(0.3, Math.min(6, xf.s * (e.deltaY > 0 ? 0.92 : 1.08)));
+    const minS = xf.minS || 0.01;
+    xf.s = Math.max(minS, Math.min(6, xf.s * (e.deltaY > 0 ? 0.92 : 1.08)));
     applyXf(img, xf);
   }, { passive: false });
 
@@ -1052,7 +1103,8 @@
       const d = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY);
-      touch.xf.s = Math.max(0.3, Math.min(6, touch.xf.s * d / lastPinchDist));
+      const minS = touch.xf.minS || 0.01;
+      touch.xf.s = Math.max(minS, Math.min(6, touch.xf.s * d / lastPinchDist));
       lastPinchDist = d;
     }
     applyXf(touch.img, touch.xf);
