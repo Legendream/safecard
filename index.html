@@ -133,6 +133,7 @@
     }
     .print-steps strong { font-weight: 700; }
     .print-steps ol { padding-left: 15px; }
+    .print-steps-title { font-weight: 700; margin-bottom: 3px; }
     .print-hint { margin-top: 9px; font-size: 0.73rem; color: var(--mid); text-align: center; line-height: 1.5; }
 
     /* ── 右欄：預覽（sticky，跟隨頁面捲動）── */
@@ -195,7 +196,7 @@
       display: flex; flex-direction: column; gap: 1.5mm; overflow: hidden;
     }
     .card-row { display: flex; align-items: baseline; gap: 2mm; font-size: 7pt; line-height: 1.35; }
-    .card-key { font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); }
+    .card-key { font-size: 6pt; font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); }
     .card-val {
       border-bottom: 0.5px solid var(--light); flex: 1; min-width: 0;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -248,8 +249,27 @@
     }
     .blood-badge {
       background: var(--blue); color: var(--white);
-      font-weight: 700; font-size: 8pt; padding: 0 3mm; border-radius: 3px; flex-shrink: 0;
+      font-weight: 700; font-size: 8pt; padding: 0.8mm 2.5mm 0.5mm; border-radius: 3px; flex-shrink: 0;
+      display: inline-flex; flex-direction: column; align-items: center; line-height: 1.2;
     }
+    .blood-badge::before {
+      content: '血型';
+      font-size: 4pt; font-weight: 400; opacity: 0.85; letter-spacing: 0.04em;
+    }
+
+    .card-instruction {
+      font-size: 6pt; line-height: 1.35;
+      background: var(--blue-lt); border-left: 2px solid var(--blue);
+      padding: 1mm 2mm; border-radius: 2px; margin-bottom: 1.5mm;
+      white-space: normal; overflow: hidden;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    }
+    .card-instruction-label {
+      font-size: 4.5pt; font-weight: 700; color: var(--blue);
+      letter-spacing: 0.06em; display: block; margin-bottom: 0.3mm;
+    }
+    .card-med-row { display: flex; gap: 2mm; overflow: hidden; font-size: 7pt; line-height: 1.35; }
+    .card-med-col { flex: 1; display: flex; flex-direction: column; gap: 0.5mm; overflow: hidden; min-width: 0; }
 
     /* 寵物卡 body */
     .pet-body {
@@ -403,12 +423,20 @@
 
     <div class="field">
       <label for="allergy">過敏史</label>
-      <textarea id="allergy" placeholder="例：青黴素、花生、海鮮…" oninput="sync()"></textarea>
+      <p class="field-hint">卡片限顯示 10 字，超出將被截斷。</p>
+      <textarea id="allergy" placeholder="例：青黴素、花生、海鮮…" maxlength="10" oninput="sync()"></textarea>
     </div>
 
     <div class="field">
       <label for="medical">病史</label>
-      <textarea id="medical" placeholder="例：高血壓、糖尿病、心臟病…" oninput="sync()"></textarea>
+      <p class="field-hint">卡片限顯示 10 字，超出將被截斷。</p>
+      <textarea id="medical" placeholder="例：高血壓、糖尿病、心臟病…" maxlength="10" oninput="sync()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="instruction">急救指示</label>
+      <p class="field-hint">填寫救援者看到此卡應立即採取的行動。卡片限顯示 25 字。</p>
+      <textarea id="instruction" placeholder="例：我有低血糖，請給我口袋裡的糖果。／請取出背包中的胰島素筆。" maxlength="25" oninput="sync()"></textarea>
     </div>
 
     <div class="section-title">背面 — 緊急聯絡</div>
@@ -441,21 +469,7 @@
       <input type="text" id="loc2" placeholder="例：○○公園廣場" oninput="sync()">
     </div>
 
-    <div class="privacy-inline">
-      🔒 純前端技術，資料不會離開瀏覽器。<br>
-      關閉視窗後，所有內容即刻消失，不留任何紀錄。
-    </div>
-    <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
-    <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
-    <div class="print-steps">
-      <p class="print-steps-title">列印前請確認：</p>
-      <ol>
-        <li>縮放比例設為「<strong>實際大小</strong>」或 <strong>100%</strong></li>
-        <li>紙張 <strong>A4</strong> 直向，啟用「<strong>背景圖形</strong>」</li>
-        <li>帶去印刷店：目的地選「<strong>另存為 PDF</strong>」，再將 PDF 帶去輸出</li>
-      </ol>
-    </div>
-    <p class="print-hint">列印後沿邊緣剪下，護貝後放入避難包。<br>建議列印 2 份，分別放置於家中與隨身袋。</p>
+    <div id="print-panel-human"></div>
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
@@ -689,21 +703,7 @@
       </div>
     </div>
 
-    <div class="privacy-inline">
-      🔒 純前端技術，資料不會離開瀏覽器。<br>
-      關閉視窗後，所有內容即刻消失，不留任何紀錄。
-    </div>
-    <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
-    <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
-    <div class="print-steps">
-      <p class="print-steps-title">列印前請確認：</p>
-      <ol>
-        <li>縮放比例設為「<strong>實際大小</strong>」或 <strong>100%</strong></li>
-        <li>紙張 <strong>A4</strong> 直向，啟用「<strong>背景圖形</strong>」</li>
-        <li>帶去印刷店：目的地選「<strong>另存為 PDF</strong>」，再將 PDF 帶去輸出</li>
-      </ol>
-    </div>
-    <p class="print-hint">列印後沿裁切線剪下，護貝後放入外出袋。</p>
+    <div id="print-panel-pet"></div>
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
@@ -772,7 +772,7 @@
   });
 
   // ── 離頁保護 ──────────────────────────────────────
-  const HUMAN_FIELDS = ['name','blood','idnum','dob','allergy','medical',
+  const HUMAN_FIELDS = ['name','blood','idnum','dob','allergy','medical','instruction',
                         'c1name','c1tel','c1rel','c2name','c2tel','c2rel','loc1','loc2'];
   const PET_FIELDS   = ['p_name','p_species','p_gender','p_breed','p_dob','p_desc',
                         'p_chip','p_chip_id','p_tag','p_tag_desc','p_id_other',
@@ -787,16 +787,21 @@
     }
   });
 
+  // ── 卡片 HTML helper（模組層級，供所有 build 函數共用）──
+  const V  = (v, ph='—') => v
+    ? `<span class="card-val">${v}</span>`
+    : `<span class="card-val" style="color:#ccc">${ph}</span>`;
+  const PV = (v, ph='—') => v || `<em style="color:#bbb">${ph}</em>`;
+  const R  = (k, v) => `<div class="pet-row"><span class="pet-key">${k}</span><span class="pet-val">${PV(v)}</span></div>`;
+
   // ── 人類卡：正面 ──────────────────────────────────
   function buildFront() {
     const name=val('name'), blood=val('blood'), dob=val('dob'),
-          idnum=val('idnum'), allergy=val('allergy'), medical=val('medical');
+          idnum=val('idnum'), allergy=val('allergy'), medical=val('medical'),
+          instruction=val('instruction');
     const bloodBadge = blood
       ? `<span class="blood-badge">${blood}</span>`
       : `<span class="blood-badge" style="background:#999">?</span>`;
-    const V = (v, ph='—') => v
-      ? `<span class="card-val">${v}</span>`
-      : `<span class="card-val" style="color:#ccc">${ph}</span>`;
     const dobFmt = dob ? dob.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
     const photoHtml = humanPhoto
       ? `<img src="${humanPhoto}" alt="大頭照">`
@@ -817,14 +822,17 @@
               <span class="card-key" style="margin-left:2mm">身分證</span>${V(idnum)}
             </div>
             <hr class="card-divider">
-            <div class="card-row" style="flex-direction:column;gap:0.5mm">
-              <span class="card-key">過敏史</span>
-              <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
+            <div class="card-med-row">
+              <div class="card-med-col">
+                <span class="card-key">過敏史</span>
+                <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
+              </div>
+              <div class="card-med-col">
+                <span class="card-key">病史</span>
+                <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
+              </div>
             </div>
-            <div class="card-row" style="flex-direction:column;gap:0.5mm">
-              <span class="card-key">病史</span>
-              <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
-            </div>
+            ${instruction ? `<div class="card-instruction"><span class="card-instruction-label">急救指示</span>${instruction}</div>` : ''}
           </div>
           <div class="card-photo-box">${photoHtml}</div>
         </div>
@@ -875,8 +883,6 @@
           med1=val('p_med1'), med1d=val('p_med1_dose'),
           med2=val('p_med2'), med2d=val('p_med2_dose');
     const dobFmt = dob ? `${dob} 年` : '';
-    const PV = (v,ph='—') => v||`<em style="color:#bbb">${ph}</em>`;
-    const R = (k,v) => `<div class="pet-row"><span class="pet-key">${k}</span><span class="pet-val">${PV(v)}</span></div>`;
     return `
       <div class="card-header">
         <span class="card-title">寵物個資與健康資料卡</span>
@@ -935,8 +941,6 @@
           foodNote=val('p_food_note'),
           vetH=val('p_vet_hospital'), vetN=val('p_vet_name'),
           vetT=val('p_vet_tel'), vetA=val('p_vet_addr');
-    const PV = (v,ph='—') => v||`<em style="color:#bbb">${ph}</em>`;
-    const R = (k,v) => `<div class="pet-row"><span class="pet-key">${k}</span><span class="pet-val">${PV(v)}</span></div>`;
     const fmt = d => d ? d.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
     return `
       <div class="card-header">
@@ -951,7 +955,7 @@
               <span class="pet-key">姓名</span><span class="pet-val">${PV(owner)}</span>
               <span class="pet-key" style="margin-left:2mm">電話</span><span class="pet-val">${PV(ownerTel)}</span>
             </div>
-            ${R('聯絡', ownerContact)}
+            ${R('社群帳號', ownerContact)}
             ${R('地址', ownerAddr)}
           </div>
         </div>
@@ -1112,9 +1116,34 @@
   }, { passive: false });
   document.addEventListener('touchend', () => { touch = null; lastPinchDist = null; });
 
+  // ── 列印面板（兩個 tab 共用，僅 hint 不同）──────────
+  function buildPrintPanel(hint) {
+    return `
+      <div class="privacy-inline">
+        🔒 純前端技術，資料不會離開瀏覽器。<br>
+        關閉視窗後，所有內容即刻消失，不留任何紀錄。
+      </div>
+      <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
+      <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
+      <div class="print-steps">
+        <p class="print-steps-title">列印前請確認：</p>
+        <ol>
+          <li>縮放比例設為「<strong>實際大小</strong>」或 <strong>100%</strong></li>
+          <li>紙張 <strong>A4</strong> 直向，啟用「<strong>背景圖形</strong>」</li>
+          <li>帶去印刷店：目的地選「<strong>另存為 PDF</strong>」，再將 PDF 帶去輸出</li>
+        </ol>
+      </div>
+      <p class="print-hint">${hint}</p>`;
+  }
+
   sync();
   syncPet();
-  reapplyXf();
+  $('print-panel-human').innerHTML = buildPrintPanel(
+    '列印後沿邊緣剪下，護貝後放入避難包。<br>建議列印 2 份，分別放置於家中與隨身袋。'
+  );
+  $('print-panel-pet').innerHTML = buildPrintPanel(
+    '列印後沿裁切線剪下，護貝後放入外出袋。'
+  );
 
   // ── 下載備份（含填寫內容的完整 HTML）──────────────
   function downloadBackup() {
@@ -1134,6 +1163,15 @@
       const sel = dstSelects[i].options[el.selectedIndex];
       if (sel) sel.setAttribute('selected', '');
     });
+    // 將照片 dataURL 注入備份：在 body 末端附加 script 覆寫變數並重跑 sync
+    if (humanPhoto || petPhoto) {
+      const photoScript = document.createElement('script');
+      photoScript.textContent =
+        (humanPhoto ? `humanPhoto=${JSON.stringify(humanPhoto)};` : '') +
+        (petPhoto   ? `petPhoto=${JSON.stringify(petPhoto)};`     : '') +
+        'sync();syncPet();';
+      clone.querySelector('body').appendChild(photoScript);
+    }
     const html = '<!DOCTYPE html>\n' + clone.outerHTML;
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
