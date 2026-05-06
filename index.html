@@ -71,18 +71,17 @@
 
     /* #2 修正：改用 :first-child，語意更精確 */
     .section-title {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--navy);
-      border-bottom: 2px solid var(--blue-lt);
-      padding-bottom: 5px; margin: 20px 0 12px;
+      font-size: 0.95rem; font-weight: 700; color: var(--navy);
+      border-left: 3px solid var(--blue); padding-left: 9px;
+      margin: 28px 0 12px;
     }
     .section-title:first-child { margin-top: 0; }
 
     .field { margin-bottom: 11px; }
     /* #7 字型放大 */
     .field label {
-      display: block; font-size: 0.82rem; font-weight: 600;
-      color: var(--text); margin-bottom: 4px;
+      display: block; font-size: 0.75rem; font-weight: 500;
+      color: var(--mid); margin-bottom: 4px;
     }
     /* #6 helper text 取代 tooltip */
     .field-hint {
@@ -117,6 +116,16 @@
     .print-btn:hover  { background: var(--navy-dk); transform: translateY(-1px); }
     .print-btn:active { transform: translateY(0); }
     .print-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+    .download-btn {
+      display: block; width: 100%; margin-top: 8px; padding: 11px;
+      background: transparent; color: var(--navy);
+      border: 2px solid var(--navy); border-radius: 8px;
+      font-family: var(--font); font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+    }
+    .download-btn:hover  { background: var(--blue-lt); transform: translateY(-1px); }
+    .download-btn:active { transform: translateY(0); }
+    .download-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
     .print-steps {
       margin-top: 10px; padding: 9px 13px;
       background: #fffbea; border-left: 3px solid #e6b800;
@@ -186,17 +195,40 @@
       display: flex; flex-direction: column; gap: 1.5mm; overflow: hidden;
     }
     .card-row { display: flex; align-items: baseline; gap: 2mm; font-size: 7pt; line-height: 1.35; }
-    .card-key { font-weight: 700; white-space: nowrap; flex-shrink: 0; color: var(--navy); }
+    .card-key { font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); }
     .card-val {
       border-bottom: 0.5px solid var(--light); flex: 1; min-width: 0;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       color: var(--text); padding-bottom: 0.5px;
     }
     .card-divider { border: none; border-top: 0.5px solid var(--blue-lt); margin: 1mm 0; }
+    .card-front-row { display: flex; gap: 2mm; flex: 1; overflow: hidden; }
+    .card-front-fields { flex: 1; display: flex; flex-direction: column; gap: 1.5mm; overflow: hidden; }
+    .card-photo-box {
+      width: 22mm; height: 22mm; flex-shrink: 0;
+      border: 1px dashed var(--light); border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5pt; color: #bbb; text-align: center;
+      overflow: hidden; position: relative; cursor: move;
+      align-self: center;
+    }
+    .card-photo-box img {
+      position: absolute; left: 50%; top: 50%;
+      min-width: 100%; min-height: 100%; width: auto; height: auto; max-width: none;
+      transform: translate(-50%, -50%); transform-origin: center; object-fit: none;
+    }
+    .pet-photo { cursor: move; position: relative; overflow: hidden; }
+    .pet-photo img {
+      position: absolute; left: 50%; top: 50%;
+      min-width: 100%; min-height: 100%; width: auto; height: auto; max-width: none;
+      transform: translate(-50%, -50%); transform-origin: center; object-fit: none;
+    }
     /* #4 card-section-title：純文字，無 emoji */
     .card-section-title {
-      font-size: 6pt; font-weight: 700; letter-spacing: 0.08em;
-      color: var(--mid); text-transform: uppercase; margin-bottom: 0.5mm;
+      font-size: 5.5pt; font-weight: 700; letter-spacing: 0.08em;
+      color: var(--white); background: var(--navy);
+      padding: 0.3mm 2mm; border-radius: 1.5px; display: inline-block;
+      text-transform: uppercase; margin-bottom: 0.8mm;
     }
     .blood-badge {
       background: var(--blue); color: var(--white);
@@ -213,11 +245,13 @@
       border-left: 2.5px solid var(--blue-lt); padding-left: 2mm;
     }
     .pet-section-title {
-      font-size: 6pt; font-weight: 700; letter-spacing: 0.06em;
-      color: var(--navy); text-transform: uppercase; margin-bottom: 0.3mm;
+      font-size: 5.5pt; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--white); background: var(--navy);
+      padding: 0.3mm 2mm; border-radius: 1.5px; display: inline-block;
+      text-transform: uppercase; margin-bottom: 0.8mm;
     }
     .pet-row { display: flex; align-items: baseline; gap: 1.5mm; font-size: 7pt; line-height: 1.3; }
-    .pet-key { font-weight: 700; white-space: nowrap; flex-shrink: 0; color: var(--navy); min-width: 10mm; }
+    .pet-key { font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); min-width: 10mm; }
     .pet-val {
       border-bottom: 0.5px solid var(--light); flex: 1; min-width: 0;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text);
@@ -313,6 +347,12 @@
     <div class="section-title">正面 — 個人資料</div>
 
     <div class="field">
+      <label for="human_photo_input">大頭照（選填）</label>
+      <input type="file" id="human_photo_input" accept="image/*" onchange="loadPhoto(this,'human')">
+      <p class="field-hint">上傳後照片會印在卡片上，提升辨識度。</p>
+    </div>
+
+    <div class="field">
       <label for="name">姓名</label>
       <!-- #7 autocomplete -->
       <input type="text" id="name" placeholder="王小明" autocomplete="name" oninput="sync()">
@@ -384,12 +424,14 @@
       🔒 純前端技術，資料不會離開瀏覽器。<br>
       關閉視窗後，所有內容即刻消失，不留任何紀錄。
     </div>
-    <button class="print-btn" onclick="window.print()">🖨️ 列印 / 下載紙本</button>
+    <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
+    <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
     <div class="print-steps">
       <p class="print-steps-title">列印前請確認：</p>
       <ol>
         <li>縮放比例設為「<strong>實際大小</strong>」或 <strong>100%</strong></li>
         <li>紙張 <strong>A4</strong> 直向，啟用「<strong>背景圖形</strong>」</li>
+        <li>帶去印刷店：目的地選「<strong>另存為 PDF</strong>」，再將 PDF 帶去輸出</li>
       </ol>
     </div>
     <p class="print-hint">列印後沿邊緣剪下，護貝後放入避難包。<br>建議列印 2 份，分別放置於家中與隨身袋。</p>
@@ -418,6 +460,11 @@
   <aside class="form-panel">
     <div class="section-title">基本資料</div>
     <div class="field">
+      <label for="pet_photo_input">寵物照片（選填）</label>
+      <input type="file" id="pet_photo_input" accept="image/*" onchange="loadPhoto(this,'pet')">
+      <p class="field-hint">上傳後照片會印在卡片上，協助辨識走失寵物。</p>
+    </div>
+    <div class="field">
       <label for="p_name">寵物名字</label>
       <input type="text" id="p_name" placeholder="小白" oninput="syncPet()">
     </div>
@@ -445,13 +492,14 @@
         <input type="text" id="p_breed" placeholder="米克斯" oninput="syncPet()">
       </div>
       <div class="field">
-        <label for="p_dob">生日</label>
-        <input type="date" id="p_dob" oninput="syncPet()">
+        <label for="p_dob">出生年</label>
+        <input type="number" id="p_dob" placeholder="2019" min="1990" max="2030" oninput="syncPet()">
       </div>
     </div>
     <div class="field">
       <label for="p_desc">外觀描述</label>
       <input type="text" id="p_desc" placeholder="橘白花紋、左耳缺一角…" oninput="syncPet()">
+      <p class="field-hint">建議不超過 20 字（約兩行），超出將被截斷。</p>
     </div>
 
     <div class="section-title">身份辨識</div>
@@ -484,6 +532,36 @@
     <div class="field">
       <label for="p_id_other">其他辨識特徵</label>
       <input type="text" id="p_id_other" placeholder="尾巴尖端白色、後腳有胎記…" oninput="syncPet()">
+    </div>
+
+    <div class="section-title">用藥狀況</div>
+    <div class="field">
+      <label for="p_chronic">慢性病 1</label>
+      <input type="text" id="p_chronic" placeholder="腎臟病…" oninput="syncPet()">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="p_med1">用藥 1</label>
+        <input type="text" id="p_med1" placeholder="藥名" oninput="syncPet()">
+      </div>
+      <div class="field">
+        <label for="p_med1_dose">給藥量</label>
+        <input type="text" id="p_med1_dose" placeholder="1/4 錠/天" oninput="syncPet()">
+      </div>
+    </div>
+    <div class="field">
+      <label for="p_chronic2">慢性病 2</label>
+      <input type="text" id="p_chronic2" placeholder="糖尿病…" oninput="syncPet()">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="p_med2">用藥 2</label>
+        <input type="text" id="p_med2" placeholder="藥名" oninput="syncPet()">
+      </div>
+      <div class="field">
+        <label for="p_med2_dose">給藥量</label>
+        <input type="text" id="p_med2_dose" placeholder="2ml/天" oninput="syncPet()">
+      </div>
     </div>
 
     <div class="section-title">照顧者資訊</div>
@@ -568,36 +646,6 @@
       <input type="text" id="p_food_note" placeholder="不能吃洋蔥…" oninput="syncPet()">
     </div>
 
-    <div class="section-title">用藥狀況</div>
-    <div class="field">
-      <label for="p_chronic">慢性病 1</label>
-      <input type="text" id="p_chronic" placeholder="腎臟病…" oninput="syncPet()">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="p_med1">用藥 1</label>
-        <input type="text" id="p_med1" placeholder="藥名" oninput="syncPet()">
-      </div>
-      <div class="field">
-        <label for="p_med1_dose">給藥量</label>
-        <input type="text" id="p_med1_dose" placeholder="1/4 錠/天" oninput="syncPet()">
-      </div>
-    </div>
-    <div class="field">
-      <label for="p_chronic2">慢性病 2</label>
-      <input type="text" id="p_chronic2" placeholder="糖尿病…" oninput="syncPet()">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="p_med2">用藥 2</label>
-        <input type="text" id="p_med2" placeholder="藥名" oninput="syncPet()">
-      </div>
-      <div class="field">
-        <label for="p_med2_dose">給藥量</label>
-        <input type="text" id="p_med2_dose" placeholder="2ml/天" oninput="syncPet()">
-      </div>
-    </div>
-
     <div class="section-title">就診診所</div>
     <div class="field-row">
       <div class="field">
@@ -624,12 +672,14 @@
       🔒 純前端技術，資料不會離開瀏覽器。<br>
       關閉視窗後，所有內容即刻消失，不留任何紀錄。
     </div>
-    <button class="print-btn" onclick="window.print()">🖨️ 列印 / 下載紙本</button>
+    <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
+    <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
     <div class="print-steps">
       <p class="print-steps-title">列印前請確認：</p>
       <ol>
         <li>縮放比例設為「<strong>實際大小</strong>」或 <strong>100%</strong></li>
         <li>紙張 <strong>A4</strong> 直向，啟用「<strong>背景圖形</strong>」</li>
+        <li>帶去印刷店：目的地選「<strong>另存為 PDF</strong>」，再將 PDF 帶去輸出</li>
       </ol>
     </div>
     <p class="print-hint">列印後沿裁切線剪下，護貝後放入外出袋。</p>
@@ -727,27 +777,35 @@
       ? `<span class="card-val">${v}</span>`
       : `<span class="card-val" style="color:#ccc">${ph}</span>`;
     const dobFmt = dob ? dob.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
+    const photoHtml = humanPhoto
+      ? `<img src="${humanPhoto}" alt="大頭照">`
+      : `貼照片`;
     return `
       <div class="card-header">
         <span class="card-title">緊急聯絡小卡</span>
         <span class="card-side-label">正面</span>
       </div>
       <div class="card-body">
-        <div class="card-row">
-          <span class="card-key">姓名</span>${V(name,'未填寫')}${bloodBadge}
-        </div>
-        <div class="card-row">
-          <span class="card-key">生日</span>${V(dobFmt)}
-          <span class="card-key" style="margin-left:2mm">身分證</span>${V(idnum)}
-        </div>
-        <hr class="card-divider">
-        <div class="card-row" style="flex-direction:column;gap:1mm">
-          <span class="card-key">過敏史</span>
-          <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
-        </div>
-        <div class="card-row" style="flex-direction:column;gap:1mm">
-          <span class="card-key">病史</span>
-          <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
+        <div class="card-front-row">
+          <div class="card-front-fields">
+            <div class="card-row">
+              <span class="card-key">姓名</span>${V(name,'未填寫')}${bloodBadge}
+            </div>
+            <div class="card-row">
+              <span class="card-key">生日</span>${V(dobFmt)}
+              <span class="card-key" style="margin-left:2mm">身分證</span>${V(idnum)}
+            </div>
+            <hr class="card-divider">
+            <div class="card-row" style="flex-direction:column;gap:0.5mm">
+              <span class="card-key">過敏史</span>
+              <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
+            </div>
+            <div class="card-row" style="flex-direction:column;gap:0.5mm">
+              <span class="card-key">病史</span>
+              <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
+            </div>
+          </div>
+          <div class="card-photo-box">${photoHtml}</div>
         </div>
       </div>`;
   }
@@ -783,6 +841,7 @@
     const f = buildFront(), b = buildBack();
     $('preview-front').innerHTML = f; $('print-front').innerHTML = f;
     $('preview-back').innerHTML  = b; $('print-back').innerHTML  = b;
+    if (typeof reapplyXf === 'function') reapplyXf();
   }
 
   // ── 寵物卡：正面（#4 移除 emoji section title）────
@@ -794,7 +853,7 @@
           chronic=val('p_chronic'), chronic2=val('p_chronic2'),
           med1=val('p_med1'), med1d=val('p_med1_dose'),
           med2=val('p_med2'), med2d=val('p_med2_dose');
-    const dobFmt = dob ? dob.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
+    const dobFmt = dob ? `${dob} 年` : '';
     const PV = (v,ph='—') => v||`<em style="color:#bbb">${ph}</em>`;
     const R = (k,v) => `<div class="pet-row"><span class="pet-key">${k}</span><span class="pet-val">${PV(v)}</span></div>`;
     return `
@@ -813,9 +872,9 @@
             </div>
             ${R('品種', breed)}
             ${R('生日', dobFmt)}
-            ${R('外觀', desc)}
+            <div class="pet-row" style="align-items:flex-start"><span class="pet-key">外觀</span><span class="pet-val" style="white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${PV(desc)}</span></div>
           </div>
-          <div class="pet-photo">貼照片<br><span style="font-size:5pt;color:#aaa">建議含飼主合照</span></div>
+          <div class="pet-photo">${petPhoto ? `<img src="${petPhoto}" alt="寵物照片">` : '貼照片<br><span style="font-size:5pt;color:#aaa">建議含飼主合照</span>'}</div>
         </div>
         <div class="pet-section">
           <div class="pet-section-title">身份辨識</div>
@@ -875,14 +934,14 @@
             <span class="pet-key">絕育</span><span class="pet-val">${PV(neutered)}</span>
             <span class="pet-key" style="margin-left:2mm">藥物過敏</span><span class="pet-val">${PV(drugAllergy,'無')}</span>
           </div>
-          ${vac1 ? `<div class="pet-row"><span class="pet-key">疫苗1</span><span class="pet-val">${vac1}${fmt(vac1d)?' ｜ '+fmt(vac1d):''}</span></div>` : ''}
-          ${vac2 ? `<div class="pet-row"><span class="pet-key">疫苗2</span><span class="pet-val">${vac2}${fmt(vac2d)?' ｜ '+fmt(vac2d):''}</span></div>` : ''}
+          <div class="pet-row"><span class="pet-key">疫苗1</span><span class="pet-val">${vac1 ? `${vac1}${fmt(vac1d)?' ｜ '+fmt(vac1d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
+          <div class="pet-row"><span class="pet-key">疫苗2</span><span class="pet-val">${vac2 ? `${vac2}${fmt(vac2d)?' ｜ '+fmt(vac2d):''}` : '<em style="color:#bbb">—</em>'}</span></div>
         </div>
         <div class="pet-section">
           <div class="pet-section-title">飲食</div>
-          ${meal1t||meal1d ? `<div class="pet-row"><span class="pet-key">${meal1t||'餐1'}</span><span class="pet-val">${PV(meal1d)}</span></div>` : ''}
-          ${meal2t||meal2d ? `<div class="pet-row"><span class="pet-key">${meal2t||'餐2'}</span><span class="pet-val">${PV(meal2d)}</span></div>` : ''}
-          ${foodNote ? R('注意', foodNote) : ''}
+          <div class="pet-row"><span class="pet-key">${meal1t||'餐1'}</span><span class="pet-val">${PV(meal1d)}</span></div>
+          <div class="pet-row"><span class="pet-key">${meal2t||'餐2'}</span><span class="pet-val">${PV(meal2d)}</span></div>
+          ${R('注意', foodNote)}
         </div>
         <div class="pet-section">
           <div class="pet-section-title">就診</div>
@@ -902,10 +961,135 @@
     const f = buildPetFront(), b = buildPetBack();
     $('preview-pet-front').innerHTML = f; $('print-pet-front').innerHTML = f;
     $('preview-pet-back').innerHTML  = b; $('print-pet-back').innerHTML  = b;
+    if (typeof reapplyXf === 'function') reapplyXf();
   }
+
+  // ── 照片上傳 + 拖曳縮放 ──────────────────────────
+  let humanPhoto = null, petPhoto = null;
+  let humanXf = {x:0, y:0, s:1}, petXf = {x:0, y:0, s:1};
+
+  function loadPhoto(input, type) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      if (type === 'human') {
+        humanPhoto = e.target.result;
+        humanXf = {x:0, y:0, s:1};   // 新照片重設位置
+        sync();
+      } else {
+        petPhoto = e.target.result;
+        petXf = {x:0, y:0, s:1};
+        syncPet();
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function applyXf(img, xf) {
+    img.style.transform =
+      `translate(calc(-50% + ${xf.x}px), calc(-50% + ${xf.y}px)) scale(${xf.s})`;
+  }
+
+  function reapplyXf() {
+    const hImg = document.querySelector('#preview-front .card-photo-box img');
+    const pImg = document.querySelector('#preview-pet-front .pet-photo img');
+    if (hImg) applyXf(hImg, humanXf);
+    if (pImg) applyXf(pImg, petXf);
+  }
+
+  // ── 拖曳＋滾輪縮放（document-level，只綁一次）──
+  let drag = null;
+  document.addEventListener('mousedown', e => {
+    const box = e.target.closest('.card-photo-box, .pet-photo');
+    const img = box?.querySelector('img');
+    if (!img) return;
+    const xf = box.classList.contains('card-photo-box') ? humanXf : petXf;
+    drag = { img, xf, sx: e.clientX, sy: e.clientY, ox: xf.x, oy: xf.y };
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!drag) return;
+    drag.xf.x = drag.ox + (e.clientX - drag.sx);
+    drag.xf.y = drag.oy + (e.clientY - drag.sy);
+    applyXf(drag.img, drag.xf);
+  });
+  document.addEventListener('mouseup', () => { drag = null; });
+
+  document.addEventListener('wheel', e => {
+    const box = e.target.closest('.card-photo-box, .pet-photo');
+    const img = box?.querySelector('img');
+    if (!img) return;
+    e.preventDefault();
+    const xf = box.classList.contains('card-photo-box') ? humanXf : petXf;
+    xf.s = Math.max(0.3, Math.min(6, xf.s * (e.deltaY > 0 ? 0.92 : 1.08)));
+    applyXf(img, xf);
+  }, { passive: false });
+
+  // Touch: 單指拖曳、雙指縮放
+  let touch = null, lastPinchDist = null;
+  document.addEventListener('touchstart', e => {
+    const box = e.target.closest('.card-photo-box, .pet-photo');
+    const img = box?.querySelector('img');
+    if (!img) return;
+    const xf = box.classList.contains('card-photo-box') ? humanXf : petXf;
+    if (e.touches.length === 1) {
+      touch = { img, xf, sx: e.touches[0].clientX, sy: e.touches[0].clientY, ox: xf.x, oy: xf.y };
+    } else if (e.touches.length === 2) {
+      touch = { img, xf };
+      lastPinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+    }
+    e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchmove', e => {
+    if (!touch) return;
+    if (e.touches.length === 1 && touch.ox !== undefined) {
+      touch.xf.x = touch.ox + (e.touches[0].clientX - touch.sx);
+      touch.xf.y = touch.oy + (e.touches[0].clientY - touch.sy);
+    } else if (e.touches.length === 2 && lastPinchDist) {
+      const d = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+      touch.xf.s = Math.max(0.3, Math.min(6, touch.xf.s * d / lastPinchDist));
+      lastPinchDist = d;
+    }
+    applyXf(touch.img, touch.xf);
+    e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchend', () => { touch = null; lastPinchDist = null; });
 
   sync();
   syncPet();
+  reapplyXf();
+
+  // ── 下載備份（含填寫內容的完整 HTML）──────────────
+  function downloadBackup() {
+    const clone = document.documentElement.cloneNode(true);
+    // 寫入當前 input / textarea 值
+    const srcInputs = document.querySelectorAll('input, textarea');
+    const dstInputs = clone.querySelectorAll('input, textarea');
+    srcInputs.forEach((el, i) => {
+      dstInputs[i].setAttribute('value', el.value);
+      if (el.tagName === 'TEXTAREA') dstInputs[i].textContent = el.value;
+    });
+    // 寫入 select 選中項目
+    const srcSelects = document.querySelectorAll('select');
+    const dstSelects = clone.querySelectorAll('select');
+    srcSelects.forEach((el, i) => {
+      Array.from(dstSelects[i].options).forEach(opt => opt.removeAttribute('selected'));
+      const sel = dstSelects[i].options[el.selectedIndex];
+      if (sel) sel.setAttribute('selected', '');
+    });
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'safecard-備份.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
 </script>
 
 </body>
