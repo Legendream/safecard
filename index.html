@@ -100,6 +100,30 @@
     .field textarea { resize: vertical; min-height: 48px; }
     .field-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     .field-row3 { display: grid; grid-template-columns: 2fr 1.4fr 2fr; gap: 5px; }
+    .med-entry + .med-entry,
+    .meal-entry + .meal-entry { border-top: 1px solid var(--light); padding-top: 10px; margin-top: 4px; }
+    .condition-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .cond-tag {
+      padding: 3px 10px; border: 1px solid var(--light); border-radius: 20px;
+      font-size: 11.5px; background: var(--white); color: var(--mid);
+      cursor: pointer; font-family: var(--font); line-height: 1.6;
+      transition: border-color .15s, color .15s, background .15s;
+    }
+    .cond-tag:hover { border-color: var(--blue); color: var(--blue); background: #fff7ed; }
+    .entry-actions { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+    .remove-entry-btn {
+      background: none; border: none; color: var(--mid); font-size: 11px;
+      cursor: pointer; padding: 2px 8px; border-radius: 4px; font-family: var(--font);
+      transition: color .15s, background .15s;
+    }
+    .remove-entry-btn:hover { color: #dc2626; background: #fee2e2; }
+    .add-entry-btn {
+      display: block; width: 100%; margin-top: 10px; padding: 7px;
+      background: none; border: 1.5px dashed var(--light); border-radius: 6px;
+      color: var(--mid); font-size: 12px; cursor: pointer; text-align: center;
+      font-family: var(--font); transition: border-color .15s, color .15s, background .15s;
+    }
+    .add-entry-btn:hover { border-color: var(--blue); color: var(--blue); background: #fff7ed; }
 
     /* 列印按鈕區 */
     .privacy-inline {
@@ -570,34 +594,80 @@
     </div>
 
     <div class="section-title">用藥狀況</div>
-    <div class="field">
-      <label for="p_chronic">慢性病 1</label>
-      <input type="text" id="p_chronic" placeholder="腎臟病…" oninput="syncPet()">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="p_med1">用藥 1</label>
-        <input type="text" id="p_med1" placeholder="藥名" oninput="syncPet()">
+    <div id="pet-med-list">
+      <div class="med-entry">
+        <div class="field">
+          <label>健康狀況 1</label>
+          <input type="text" class="f-condition" list="pet-conditions-list" placeholder="腎臟病、過敏、胃腸問題…" oninput="syncPet()">
+          <div class="condition-tags">
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腎臟病')">腎臟病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'心臟病')">心臟病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'糖尿病')">糖尿病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'過敏')">過敏</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腸胃問題')">腸胃問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'牙齒問題')">牙齒問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'皮膚病')">皮膚病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'骨關節炎')">骨關節炎</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'耳朵感染')">耳朵感染</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'癲癇')">癲癇</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'甲狀腺問題')">甲狀腺問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腫瘤／癌症')">腫瘤／癌症</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>藥名</label>
+            <input type="text" class="f-med" placeholder="如：利尿劑" oninput="syncPet()">
+          </div>
+          <div class="field">
+            <label>用途</label>
+            <input type="text" class="f-purpose" placeholder="消水腫" oninput="syncPet()">
+          </div>
+        </div>
+        <div class="field">
+          <label>頻率</label>
+          <input type="text" class="f-freq" placeholder="每天早晚各一次" oninput="syncPet()">
+        </div>
       </div>
-      <div class="field">
-        <label for="p_med1_dose">給藥量</label>
-        <input type="text" id="p_med1_dose" placeholder="1/4 錠/天" oninput="syncPet()">
+      <div class="med-entry">
+        <div class="entry-actions">
+          <button type="button" class="remove-entry-btn" onclick="removeMedEntry(this)">✕ 移除</button>
+        </div>
+        <div class="field">
+          <label>健康狀況 2</label>
+          <input type="text" class="f-condition" list="pet-conditions-list" placeholder="糖尿病、癌症、牙齒問題…" oninput="syncPet()">
+          <div class="condition-tags">
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腎臟病')">腎臟病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'心臟病')">心臟病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'糖尿病')">糖尿病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'過敏')">過敏</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腸胃問題')">腸胃問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'牙齒問題')">牙齒問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'皮膚病')">皮膚病</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'骨關節炎')">骨關節炎</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'耳朵感染')">耳朵感染</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'癲癇')">癲癇</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'甲狀腺問題')">甲狀腺問題</button>
+            <button type="button" class="cond-tag" onclick="pickCondition(this,'腫瘤／癌症')">腫瘤／癌症</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>藥名</label>
+            <input type="text" class="f-med" placeholder="如：胰島素" oninput="syncPet()">
+          </div>
+          <div class="field">
+            <label>用途</label>
+            <input type="text" class="f-purpose" placeholder="控制血糖" oninput="syncPet()">
+          </div>
+        </div>
+        <div class="field">
+          <label>頻率</label>
+          <input type="text" class="f-freq" placeholder="餐後 30 分鐘給藥" oninput="syncPet()">
+        </div>
       </div>
     </div>
-    <div class="field">
-      <label for="p_chronic2">慢性病 2</label>
-      <input type="text" id="p_chronic2" placeholder="糖尿病…" oninput="syncPet()">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="p_med2">用藥 2</label>
-        <input type="text" id="p_med2" placeholder="藥名" oninput="syncPet()">
-      </div>
-      <div class="field">
-        <label for="p_med2_dose">給藥量</label>
-        <input type="text" id="p_med2_dose" placeholder="2ml/天" oninput="syncPet()">
-      </div>
-    </div>
+    <button type="button" class="add-entry-btn" onclick="addMedEntry()">＋ 新增用藥</button>
 
     <div class="section-title">照顧者資訊</div>
     <div class="field-row">
@@ -656,27 +726,37 @@
     </div>
 
     <div class="section-title">飲食習慣</div>
-    <div class="field-row3">
-      <div class="field">
-        <label for="p_meal1_time">餐次 1</label>
-        <input type="text" id="p_meal1_time" placeholder="早餐" oninput="syncPet()">
+    <div id="pet-meal-list">
+      <div class="meal-entry">
+        <div class="field-row3">
+          <div class="field">
+            <label>餐次 1</label>
+            <input type="text" class="f-time" placeholder="早餐" oninput="syncPet()">
+          </div>
+          <div class="field" style="grid-column: span 2">
+            <label>食物 ＆ 份量</label>
+            <input type="text" class="f-desc" placeholder="15g 乾糧" oninput="syncPet()">
+          </div>
+        </div>
       </div>
-      <div class="field" style="grid-column: span 2">
-        <label for="p_meal1_desc">食物 ＆ 份量</label>
-        <input type="text" id="p_meal1_desc" placeholder="15g 乾糧" oninput="syncPet()">
+      <div class="meal-entry">
+        <div class="entry-actions">
+          <button type="button" class="remove-entry-btn" onclick="removeMealEntry(this)">✕ 移除</button>
+        </div>
+        <div class="field-row3">
+          <div class="field">
+            <label>餐次 2</label>
+            <input type="text" class="f-time" placeholder="晚餐" oninput="syncPet()">
+          </div>
+          <div class="field" style="grid-column: span 2">
+            <label>食物 ＆ 份量</label>
+            <input type="text" class="f-desc" placeholder="一個罐頭" oninput="syncPet()">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="field-row3">
-      <div class="field">
-        <label for="p_meal2_time">餐次 2</label>
-        <input type="text" id="p_meal2_time" placeholder="晚餐" oninput="syncPet()">
-      </div>
-      <div class="field" style="grid-column: span 2">
-        <label for="p_meal2_desc">食物 ＆ 份量</label>
-        <input type="text" id="p_meal2_desc" placeholder="一個罐頭" oninput="syncPet()">
-      </div>
-    </div>
-    <div class="field">
+    <button type="button" class="add-entry-btn" onclick="addMealEntry()">＋ 新增餐次</button>
+    <div class="field" style="margin-top:10px">
       <label for="p_food_note">飲食特別注意</label>
       <input type="text" id="p_food_note" placeholder="不能吃洋蔥…" oninput="syncPet()">
     </div>
@@ -692,17 +772,40 @@
         <input type="text" id="p_vet_name" placeholder="陳醫師" oninput="syncPet()">
       </div>
     </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="p_vet_tel">電話</label>
-        <input type="tel" id="p_vet_tel" placeholder="02-1234-5678" autocomplete="tel" oninput="syncPet()">
-      </div>
-      <div class="field">
-        <label for="p_vet_addr">地址</label>
-        <input type="text" id="p_vet_addr" placeholder="台北市…" oninput="syncPet()">
-      </div>
+    <div class="field">
+      <label for="p_vet_tel">電話</label>
+      <input type="tel" id="p_vet_tel" placeholder="02-1234-5678" autocomplete="tel" oninput="syncPet()">
+    </div>
+    <div class="field">
+      <label for="p_vet_addr">地址</label>
+      <input type="text" id="p_vet_addr" placeholder="台北市○○區○○路 123 號" oninput="syncPet()">
     </div>
 
+    <datalist id="pet-conditions-list">
+      <option value="過敏">
+      <option value="到新環境易焦慮">
+      <option value="胃脹氣">
+      <option value="發炎性腸病（IBD）">
+      <option value="癌症">
+      <option value="十字韌帶斷裂">
+      <option value="內分泌相關疾病">
+      <option value="牙齒問題">
+      <option value="糖尿病">
+      <option value="腸胃問題">
+      <option value="耳朵感染">
+      <option value="腎臟病">
+      <option value="心臟病">
+      <option value="皮膚病">
+      <option value="骨關節炎">
+      <option value="白內障">
+      <option value="甲狀腺問題">
+      <option value="泌尿道感染">
+      <option value="肝臟疾病">
+      <option value="貧血">
+      <option value="癲癇">
+      <option value="呼吸道問題">
+      <option value="肥胖">
+    </datalist>
     <div id="print-panel-pet"></div>
   </aside>
 
@@ -778,11 +881,10 @@
                         'p_chip','p_chip_id','p_tag','p_tag_desc','p_id_other',
                         'p_owner','p_owner_tel','p_owner_contact','p_owner_addr',
                         'p_neutered','p_drug_allergy','p_vac1','p_vac1_date','p_vac2','p_vac2_date',
-                        'p_meal1_time','p_meal1_desc','p_meal2_time','p_meal2_desc','p_food_note',
-                        'p_chronic','p_chronic2','p_med1','p_med1_dose','p_med2','p_med2_dose',
-                        'p_vet_hospital','p_vet_name','p_vet_tel','p_vet_addr'];
+                        'p_food_note','p_vet_hospital','p_vet_name','p_vet_tel','p_vet_addr'];
   window.addEventListener('beforeunload', e => {
-    if ([...HUMAN_FIELDS,...PET_FIELDS].some(id => val(id))) {
+    const hasDynamic = Array.from(document.querySelectorAll('#pet-med-list input, #pet-meal-list input')).some(el => el.value.trim());
+    if ([...HUMAN_FIELDS,...PET_FIELDS].some(id => val(id)) || hasDynamic) {
       e.preventDefault(); e.returnValue = '';
     }
   });
@@ -878,10 +980,13 @@
     const name=val('p_name'), species=val('p_species'), gender=val('p_gender'),
           breed=val('p_breed'), dob=val('p_dob'), desc=val('p_desc'),
           chip=val('p_chip'), chipId=val('p_chip_id'),
-          tag=val('p_tag'), tagDesc=val('p_tag_desc'), idOther=val('p_id_other'),
-          chronic=val('p_chronic'), chronic2=val('p_chronic2'),
-          med1=val('p_med1'), med1d=val('p_med1_dose'),
-          med2=val('p_med2'), med2d=val('p_med2_dose');
+          tag=val('p_tag'), tagDesc=val('p_tag_desc'), idOther=val('p_id_other');
+    const medEntries = Array.from(document.querySelectorAll('#pet-med-list .med-entry')).map(e => ({
+      condition: e.querySelector('.f-condition')?.value.trim() || '',
+      med:       e.querySelector('.f-med')?.value.trim() || '',
+      purpose:   e.querySelector('.f-purpose')?.value.trim() || '',
+      freq:      e.querySelector('.f-freq')?.value.trim() || '',
+    }));
     const dobFmt = dob ? `${dob} 年` : '';
     return `
       <div class="card-header">
@@ -920,10 +1025,12 @@
         <div class="pet-section">
           <div class="pet-section-title">用藥</div>
           <div class="pet-section-rows">
-            ${R('慢性病1', chronic)}
-            ${med1 ? `<div class="pet-row"><span class="pet-key">用藥1</span><span class="pet-val">${med1}${med1d?' ｜ '+med1d:''}</span></div>` : ''}
-            ${chronic2 ? R('慢性病2', chronic2) : ''}
-            ${med2 ? `<div class="pet-row"><span class="pet-key">用藥2</span><span class="pet-val">${med2}${med2d?' ｜ '+med2d:''}</span></div>` : ''}
+            ${medEntries.map((e, i) => {
+              const n = medEntries.length > 1 ? (i+1) : '';
+              const drugInfo = [e.med, e.purpose, e.freq].filter(Boolean).join(' ｜ ');
+              return (e.condition ? R('狀況'+n, e.condition) : '') +
+                     (drugInfo ? `<div class="pet-row"><span class="pet-key">用藥${n}</span><span class="pet-val">${drugInfo}</span></div>` : '');
+            }).join('')}
           </div>
         </div>
       </div>`;
@@ -936,11 +1043,14 @@
           neutered=val('p_neutered'), drugAllergy=val('p_drug_allergy'),
           vac1=val('p_vac1'), vac1d=val('p_vac1_date'),
           vac2=val('p_vac2'), vac2d=val('p_vac2_date'),
-          meal1t=val('p_meal1_time'), meal1d=val('p_meal1_desc'),
-          meal2t=val('p_meal2_time'), meal2d=val('p_meal2_desc'),
           foodNote=val('p_food_note'),
           vetH=val('p_vet_hospital'), vetN=val('p_vet_name'),
           vetT=val('p_vet_tel'), vetA=val('p_vet_addr');
+    const mealEntries = Array.from(document.querySelectorAll('#pet-meal-list .meal-entry')).map((e, i) => ({
+      time: e.querySelector('.f-time')?.value.trim() || '',
+      desc: e.querySelector('.f-desc')?.value.trim() || '',
+      idx:  i,
+    }));
     const fmt = d => d ? d.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
     return `
       <div class="card-header">
@@ -973,22 +1083,19 @@
         <div class="pet-section">
           <div class="pet-section-title">飲食</div>
           <div class="pet-section-rows">
-            <div class="pet-row"><span class="pet-key">${meal1t||'餐1'}</span><span class="pet-val">${PV(meal1d)}</span></div>
-            <div class="pet-row"><span class="pet-key">${meal2t||'餐2'}</span><span class="pet-val">${PV(meal2d)}</span></div>
+            ${mealEntries.map(e => `<div class="pet-row"><span class="pet-key">${e.time||'餐'+(e.idx+1)}</span><span class="pet-val">${PV(e.desc)}</span></div>`).join('')}
             ${R('注意', foodNote)}
           </div>
         </div>
         <div class="pet-section">
           <div class="pet-section-title">就診</div>
           <div class="pet-section-rows">
-          <div class="pet-row">
-            <span class="pet-key">醫院</span><span class="pet-val">${PV(vetH)}</span>
-            <span class="pet-key" style="margin-left:2mm">獸醫</span><span class="pet-val">${PV(vetN)}</span>
-          </div>
-          <div class="pet-row">
-            <span class="pet-key">電話</span><span class="pet-val">${PV(vetT)}</span>
-            <span class="pet-key" style="margin-left:2mm">地址</span><span class="pet-val">${PV(vetA)}</span>
-          </div>
+            <div class="pet-row">
+              <span class="pet-key">醫院</span><span class="pet-val">${PV(vetH)}</span>
+              <span class="pet-key" style="margin-left:2mm">獸醫</span><span class="pet-val">${PV(vetN)}</span>
+            </div>
+            ${R('電話', vetT)}
+            ${R('地址', vetA)}
           </div>
         </div>
       </div>`;
@@ -999,6 +1106,93 @@
     $('preview-pet-front').innerHTML = f; $('print-pet-front').innerHTML = f;
     $('preview-pet-back').innerHTML  = b; $('print-pet-back').innerHTML  = b;
     if (typeof reapplyXf === 'function') reapplyXf();
+  }
+
+  function addMedEntry() {
+    const list = document.getElementById('pet-med-list');
+    const n = list.children.length + 1;
+    const div = document.createElement('div');
+    div.className = 'med-entry';
+    div.innerHTML = `
+      <div class="entry-actions">
+        <button type="button" class="remove-entry-btn" onclick="removeMedEntry(this)">✕ 移除</button>
+      </div>
+      <div class="field">
+        <label>健康狀況 ${n}</label>
+        <input type="text" class="f-condition" list="pet-conditions-list" placeholder="骨關節炎、耳朵感染…" oninput="syncPet()">
+        <div class="condition-tags">
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'腎臟病')">腎臟病</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'心臟病')">心臟病</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'糖尿病')">糖尿病</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'過敏')">過敏</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'腸胃問題')">腸胃問題</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'牙齒問題')">牙齒問題</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'皮膚病')">皮膚病</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'骨關節炎')">骨關節炎</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'耳朵感染')">耳朵感染</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'癲癇')">癲癇</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'甲狀腺問題')">甲狀腺問題</button>
+          <button type="button" class="cond-tag" onclick="pickCondition(this,'腫瘤／癌症')">腫瘤／癌症</button>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>藥名</label>
+          <input type="text" class="f-med" placeholder="藥名" oninput="syncPet()">
+        </div>
+        <div class="field">
+          <label>用途</label>
+          <input type="text" class="f-purpose" placeholder="止痛" oninput="syncPet()">
+        </div>
+      </div>
+      <div class="field">
+        <label>頻率</label>
+        <input type="text" class="f-freq" placeholder="每天一次" oninput="syncPet()">
+      </div>`;
+    list.appendChild(div);
+    div.querySelector('.f-condition').focus();
+    syncPet();
+  }
+
+  function removeMedEntry(btn) {
+    btn.closest('.med-entry').remove();
+    syncPet();
+  }
+
+  function pickCondition(btn, condition) {
+    const input = btn.closest('.field').querySelector('.f-condition');
+    const current = input.value.trim();
+    input.value = current ? current + '、' + condition : condition;
+    syncPet();
+  }
+
+  function addMealEntry() {
+    const list = document.getElementById('pet-meal-list');
+    const n = list.children.length + 1;
+    const div = document.createElement('div');
+    div.className = 'meal-entry';
+    div.innerHTML = `
+      <div class="entry-actions">
+        <button type="button" class="remove-entry-btn" onclick="removeMealEntry(this)">✕ 移除</button>
+      </div>
+      <div class="field-row3">
+        <div class="field">
+          <label>餐次 ${n}</label>
+          <input type="text" class="f-time" placeholder="下午茶" oninput="syncPet()">
+        </div>
+        <div class="field" style="grid-column: span 2">
+          <label>食物 ＆ 份量</label>
+          <input type="text" class="f-desc" placeholder="一包點心" oninput="syncPet()">
+        </div>
+      </div>`;
+    list.appendChild(div);
+    div.querySelector('.f-time').focus();
+    syncPet();
+  }
+
+  function removeMealEntry(btn) {
+    btn.closest('.meal-entry').remove();
+    syncPet();
   }
 
   // ── 照片上傳 + 拖曳縮放 ──────────────────────────
