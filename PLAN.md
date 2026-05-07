@@ -98,10 +98,16 @@
 
 ### 寵物個資與健康資料卡（pet-card，74×105mm）
 
-**正面** input IDs：`p_name`, `p_species`, `p_gender`, `p_breed`, `p_dob`（出生年，number）, `p_desc`（外觀，建議≤20字）, `p_chip`, `p_chip_id`, `p_tag`, `p_tag_desc`, `p_id_other`, `p_chronic`, `p_med1`, `p_med1_dose`, `p_chronic2`, `p_med2`, `p_med2_dose`
+**正面** input IDs：`p_name`, `p_species`, `p_gender`, `p_breed`, `p_dob`（出生年，number）, `p_desc`（外觀，建議≤20字）, `p_chip`, `p_chip_id`, `p_tag`, `p_tag_desc`, `p_id_other`
 - 版面：左欄 fields + 右側 28×28mm 照片框（`pet-photo`）
+- **用藥狀況**：動態欄位，以 `#pet-med-list` 容器管理，每筆 `.med-entry` 包含：
+  - `.f-condition`（健康狀況，連結 `<datalist id="pet-conditions-list">`，附 12 個常見病症快選標籤）
+  - `.f-med`（藥名）、`.f-purpose`（用途）、`.f-freq`（頻率）
+  - 第二筆起顯示「✕ 移除」按鈕；底部有「＋ 新增用藥」按鈕
 
-**背面** input IDs：`p_owner`, `p_owner_tel`, `p_owner_contact`, `p_owner_addr`, `p_neutered`, `p_drug_allergy`, `p_vac1`, `p_vac1_date`, `p_vac2`, `p_vac2_date`, `p_meal1_time`, `p_meal1_desc`, `p_meal2_time`, `p_meal2_desc`, `p_food_note`, `p_vet_hospital`, `p_vet_name`, `p_vet_tel`, `p_vet_addr`
+**背面** input IDs：`p_owner`, `p_owner_tel`, `p_owner_contact`, `p_owner_addr`, `p_neutered`, `p_drug_allergy`, `p_vac1`, `p_vac1_date`, `p_vac2`, `p_vac2_date`, `p_food_note`, `p_vet_hospital`, `p_vet_name`, `p_vet_tel`, `p_vet_addr`
+- **飲食習慣**：動態欄位，以 `#pet-meal-list` 容器管理，每筆 `.meal-entry` 包含 `.f-time`（餐次）和 `.f-desc`（食物與份量）；底部有「＋ 新增餐次」按鈕
+- **就診診所**：電話與地址各佔獨立一行（`p_vet_addr` 已從兩欄並排改為全寬獨立欄位）
 
 ---
 
@@ -129,6 +135,40 @@ buildPetBack()   // 寵物卡背面 → 回傳 HTML string
 - `V(v, ph)` — 有值顯示值，無值顯示灰色佔位符（人類卡）
 - `PV(v, ph)` — 同上（寵物卡）
 - `R(k, v)` — 快速產生 `<div class="pet-row">` 一行
+
+### 動態欄位
+
+用藥與飲食兩區的資料不再用固定 ID 讀取，改為**DOM query**：
+
+```js
+// buildPetFront() 內
+const medEntries = Array.from(document.querySelectorAll('#pet-med-list .med-entry')).map(e => ({
+  condition: e.querySelector('.f-condition')?.value.trim() || '',
+  med:       e.querySelector('.f-med')?.value.trim() || '',
+  purpose:   e.querySelector('.f-purpose')?.value.trim() || '',
+  freq:      e.querySelector('.f-freq')?.value.trim() || '',
+}));
+
+// buildPetBack() 內
+const mealEntries = Array.from(document.querySelectorAll('#pet-meal-list .meal-entry')).map((e, i) => ({
+  time: e.querySelector('.f-time')?.value.trim() || '',
+  desc: e.querySelector('.f-desc')?.value.trim() || '',
+  idx:  i,
+}));
+```
+
+新增／移除函數：
+
+```js
+addMedEntry()       // 在 #pet-med-list 尾端插入新 .med-entry，focus .f-condition
+removeMedEntry(btn) // 移除最近的 .med-entry，重跑 syncPet()
+addMealEntry()      // 在 #pet-meal-list 尾端插入新 .meal-entry，focus .f-time
+removeMealEntry(btn)// 移除最近的 .meal-entry，重跑 syncPet()
+pickCondition(btn, condition)
+// 點擊標籤 → 讀取同 .field 內的 .f-condition，將 condition 以「、」附加到現有值
+```
+
+**注意**：`downloadBackup()` 用 index-based 複製所有 input 值（`srcInputs[i] → dstInputs[i]`），動態新增的欄位也會被完整備份，開啟備份檔後 `syncPet()` 會正確讀取 DOM 重建卡片。
 
 ### 照片系統
 
