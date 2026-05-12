@@ -20,6 +20,7 @@
       --font:    system-ui, 'Noto Sans TC', 'PingFang TC', sans-serif;
       --hw: 90mm; --hh: 54mm; --hs: 1.6;
       --pw: 74mm; --ph: 105mm; --ps: 1.6;
+      --mw: 74mm; --mh: 105mm; --ms: 1.6;
     }
 
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
@@ -36,6 +37,141 @@
       color: #fddfc4; padding: 4px 14px; border-radius: 20px;
       font-size: 0.75rem; margin-left: auto;
     }
+
+    /* ── 實際尺寸預覽 ── */
+    .preview-ctrl {
+      width: 100%; display: flex; align-items: center; justify-content: flex-end;
+      margin-bottom: 4px;
+    }
+    .actual-size-btn {
+      padding: 5px 13px; border-radius: 16px;
+      border: 1.5px solid var(--light); background: transparent;
+      font-family: var(--font); font-size: 0.75rem; color: var(--mid);
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px;
+    }
+    .actual-size-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .actual-size-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .actual-size-notice {
+      display: none; width: 100%; align-items: center; justify-content: space-between;
+      gap: 10px; background: var(--blue-lt); border: 1px solid rgba(194,65,12,0.3);
+      border-radius: 8px; padding: 8px 14px;
+      font-size: 0.75rem; color: #7c2d12; line-height: 1.5; margin-bottom: 4px;
+    }
+    .actual-size-notice.visible { display: flex; }
+    .exit-actual-btn {
+      background: none; border: 1px solid rgba(194,65,12,0.4); border-radius: 12px;
+      padding: 2px 10px; cursor: pointer; font-family: var(--font);
+      font-size: 0.72rem; color: var(--blue); font-weight: 600; white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .exit-actual-btn:hover { background: rgba(194,65,12,0.1); }
+
+    /* 校正 Modal */
+    .calib-overlay {
+      position: fixed; inset: 0; z-index: 8500;
+      background: rgba(28,25,23,0.65); backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .calib-overlay.hidden { display: none; }
+    .calib-box {
+      background: var(--white); border-radius: 16px;
+      max-width: 520px; width: 100%; padding: 32px 28px 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .calib-title  { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .calib-sub    { font-size: 0.82rem; color: var(--mid); margin-bottom: 20px; line-height: 1.6; }
+    .calib-card-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
+    .calib-card-ref {
+      width: 85.6mm; height: 54mm; border: 2.5px dashed #a8a29e; border-radius: 5mm;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; color: var(--mid); font-size: 0.78rem; text-align: center; user-select: none;
+    }
+    .calib-hint {
+      background: #fafaf9; border: 1px solid var(--light); border-radius: 8px;
+      padding: 10px 14px; font-size: 0.78rem; color: var(--mid);
+      line-height: 1.65; margin-bottom: 20px;
+    }
+    .calib-hint kbd {
+      background: var(--light); border-radius: 3px; padding: 1px 5px;
+      font-size: 0.72rem; font-family: monospace; color: var(--text);
+    }
+    .calib-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .calib-cancel  {
+      padding: 10px 18px; border-radius: 8px; border: 1.5px solid var(--light);
+      background: transparent; font-family: var(--font);
+      font-size: 0.88rem; color: var(--mid); cursor: pointer;
+    }
+    .calib-confirm {
+      padding: 10px 20px; border-radius: 8px; background: var(--navy);
+      color: #fff; border: none; font-family: var(--font);
+      font-size: 0.88rem; font-weight: 600; cursor: pointer;
+    }
+    .calib-confirm:hover { background: #2d2926; }
+
+    /* ── 首次進入引導 Modal ── */
+    .onboard-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(28,25,23,0.72); backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .onboard-overlay.hidden { display: none; }
+    .onboard-box {
+      background: var(--white); border-radius: 16px;
+      max-width: 480px; width: 100%; padding: 36px 32px 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      position: relative;
+    }
+    .onboard-logo {
+      font-size: 1.8rem; font-weight: 800; letter-spacing: 0.02em;
+      color: var(--navy); margin-bottom: 4px;
+    }
+    .onboard-sub {
+      font-size: 0.82rem; color: var(--mid); margin-bottom: 24px;
+    }
+    .onboard-steps {
+      display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px;
+    }
+    .onboard-step {
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .onboard-step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      font-size: 0.85rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .onboard-step-text strong {
+      display: block; font-size: 0.95rem; color: var(--navy); margin-bottom: 2px;
+    }
+    .onboard-step-text span { font-size: 0.8rem; color: var(--mid); line-height: 1.5; }
+    .onboard-privacy {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--blue-lt); border-radius: 8px;
+      padding: 10px 14px; font-size: 0.78rem; color: #9a3412;
+      margin-bottom: 24px; line-height: 1.5;
+    }
+    .onboard-btn {
+      width: 100%; padding: 14px; border-radius: 10px;
+      background: var(--navy); color: #fff; border: none;
+      font-family: var(--font); font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .onboard-btn:hover { background: #2d2926; }
+    .onboard-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+    /* ── 字型大小切換 ── */
+    .font-size-ctrl { display: flex; align-items: center; gap: 4px; margin-left: 12px; }
+    .font-size-ctrl span { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-right: 2px; }
+    .fs-btn {
+      padding: 3px 10px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.25);
+      background: transparent; color: rgba(255,255,255,0.7);
+      font-family: var(--font); font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .fs-btn:hover   { background: rgba(255,255,255,0.12); color: #fff; }
+    .fs-btn.active  { background: var(--blue); border-color: var(--blue); color: #fff; }
 
     /* ── Tab Bar（sticky）── */
     .tab-bar {
@@ -87,6 +223,10 @@
     .field-hint {
       font-size: 0.72rem; color: var(--mid); margin: -2px 0 6px; line-height: 1.45;
     }
+    .field-warn {
+      font-size: 0.72rem; color: #c0392b; margin: 3px 0 0; display: none; line-height: 1.45;
+    }
+    .field-warn.visible { display: block; }
     .field input, .field select, .field textarea {
       width: 100%; padding: 10px 10px; min-height: 44px;
       border: 1.5px solid var(--light); border-radius: 6px;
@@ -174,7 +314,15 @@
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
       color: var(--mid); margin-bottom: 8px; text-transform: uppercase;
     }
-    .size-tag { margin-top: 8px; font-size: 0.72rem; color: var(--mid); }
+    .size-hint { margin-top: 10px; }
+    .size-comp { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
+    .size-comp-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .size-comp-rect { border-radius: 2px; }
+    .size-comp-rect.this-card { background: var(--blue-lt); border: 1.5px solid var(--blue); }
+    .size-comp-rect.ref-card  { background: var(--light); border: 1.5px solid #a8a29e; }
+    .size-comp-label { font-size: 0.62rem; color: var(--mid); white-space: nowrap; }
+    .size-comp-sep { font-size: 0.8rem; color: var(--light); padding-bottom: 14px; }
+    .size-tag { margin-top: 5px; font-size: 0.72rem; color: var(--mid); }
 
     /* ── 卡片縮放容器 ── */
     .h-wrapper {
@@ -193,15 +341,24 @@
       transform: scale(var(--ps)); transform-origin: top left;
       position: absolute; top: 0; left: 0;
     }
+    .m-wrapper {
+      width: calc(var(--mw) * var(--ms)); height: calc(var(--mh) * var(--ms));
+      position: relative; flex-shrink: 0;
+    }
+    .m-wrapper .medical-card {
+      transform: scale(var(--ms)); transform-origin: top left;
+      position: absolute; top: 0; left: 0;
+    }
 
     /* ── 卡片共用 ── */
-    .emergency-card, .pet-card {
+    .emergency-card, .pet-card, .medical-card {
       background: var(--white); font-family: var(--font); color: var(--text);
       overflow: hidden; position: relative; display: flex; flex-direction: column;
       box-shadow: 0 2px 12px rgba(44,74,110,0.10);
     }
     .emergency-card { width: var(--hw); height: var(--hh); border: 1.5px solid var(--light); border-radius: 3px; }
     .pet-card       { width: var(--pw); height: var(--ph); border: 1.5px solid var(--light); border-radius: 4px; }
+    .medical-card   { width: var(--mw); height: var(--mh); border: 1.5px solid var(--light); border-radius: 4px; }
 
     .card-header {
       background: var(--navy); color: var(--white);
@@ -218,6 +375,7 @@
     .card-body {
       flex: 1; padding: 2mm 3mm;
       display: flex; flex-direction: column; gap: 1.5mm; overflow: hidden;
+      justify-content: flex-start;
     }
     .card-row { display: flex; align-items: baseline; gap: 2mm; font-size: 7pt; line-height: 1.35; }
     .card-key { font-size: 6pt; font-weight: 500; white-space: nowrap; flex-shrink: 0; color: var(--mid); }
@@ -285,8 +443,8 @@
       font-size: 6pt; line-height: 1.35;
       background: var(--blue-lt); border-left: 2px solid var(--blue);
       padding: 1mm 2mm; border-radius: 2px; margin-bottom: 1.5mm;
-      white-space: normal; overflow: hidden;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      white-space: pre-line; overflow: hidden;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     }
     .card-instruction-label {
       font-size: 4.5pt; font-weight: 700; color: var(--blue);
@@ -294,6 +452,18 @@
     }
     .card-med-row { display: flex; gap: 2mm; overflow: hidden; font-size: 7pt; line-height: 1.35; }
     .card-med-col { flex: 1; display: flex; flex-direction: column; gap: 0.5mm; overflow: hidden; min-width: 0; }
+
+    /* ── 寵物卡：手冊提示 ── */
+    .pet-handbook-tip {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--blue-lt); border: 1px solid rgba(194,65,12,0.25);
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 20px;
+      font-size: 0.82rem; line-height: 1.55; color: #7c2d12;
+    }
+    .pet-handbook-tip a {
+      color: var(--blue); font-weight: 600; text-decoration: none; white-space: nowrap;
+    }
+    .pet-handbook-tip a:hover { text-decoration: underline; }
 
     /* 寵物卡 body */
     .pet-body {
@@ -331,15 +501,19 @@
 
     /* ── #1 行動版斷點 ── */
     @media (max-width: 768px) {
-      .banner { padding: 12px 16px; top: 0; }
-      .tab-bar { padding: 0 16px; top: 46px; }
-      .tab-btn { padding: 10px 14px; min-height: 44px; font-size: 0.82rem; }
+      .banner { padding: 10px 16px; top: 0; gap: 10px; }
+      .privacy-notice { display: none; }
+      .font-size-ctrl { margin-left: auto; }
+      .preview-ctrl, .actual-size-notice { display: none !important; }
+      .fs-btn { padding: 8px 16px; min-height: 44px; font-size: 0.9rem; border-radius: 8px; }
+      .tab-bar { padding: 0 16px; top: 44px; }
+      .tab-btn { padding: 10px 12px; min-height: 44px; font-size: 0.8rem; white-space: nowrap; }
       .main { grid-template-columns: 1fr; }
       .form-panel { max-height: none; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--light); }
       .preview-panel {
         position: static; max-height: none; overflow-y: visible;
         padding: 20px 16px; flex-direction: column;
-        --hs: 1.0; --ps: 1.2;
+        --hs: 1.0; --ps: 1.2; --ms: 1.2;
       }
     }
 
@@ -357,8 +531,13 @@
       body { background: white; }
 
       body[data-tab="human"] .print-pet   { display: none !important; }
+      body[data-tab="human"] .print-med   { display: none !important; }
       body[data-tab="human"] .print-human { display: block !important; }
+      body[data-tab="med"]   .print-human { display: none !important; }
+      body[data-tab="med"]   .print-pet   { display: none !important; }
+      body[data-tab="med"]   .print-med   { display: block !important; }
       body[data-tab="pet"]   .print-human { display: none !important; }
+      body[data-tab="pet"]   .print-med   { display: none !important; }
       body[data-tab="pet"]   .print-pet   { display: block !important; }
 
       .print-cards-wrap { display: flex !important; flex-direction: column; gap: 8mm; }
@@ -377,19 +556,95 @@
         border: 0.5px solid #999; box-shadow: none; border-radius: 0;
         page-break-inside: avoid;
       }
-      .emergency-card, .pet-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .print-med .m-wrapper { width: var(--mw); height: var(--mh); }
+      .print-med .m-wrapper .medical-card {
+        transform: none; position: static;
+        width: var(--mw) !important; height: var(--mh) !important;
+        border: 0.5px solid #999; box-shadow: none; border-radius: 0;
+        page-break-inside: avoid;
+      }
+      .emergency-card, .pet-card, .medical-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .cut-hint { display: block !important; font-size: 7pt; color: #888; margin-bottom: 2mm; }
     }
 
-    .print-human, .print-pet { display: none; }
+    .print-human, .print-pet, .print-med { display: none; }
     .cut-hint { display: none; }
   </style>
 </head>
 <body data-tab="human">
 
+<!-- ── 實際尺寸校正 Modal ── -->
+<div class="calib-overlay hidden no-print" id="calib-overlay" role="dialog" aria-modal="true" aria-labelledby="calib-title">
+  <div class="calib-box">
+    <div class="calib-title" id="calib-title">📏 實際尺寸校正</div>
+    <div class="calib-sub">校正後，預覽卡片的大小將接近實際印刷尺寸，讓您確認文字是否清晰易讀。</div>
+    <div class="calib-card-wrap">
+      <div class="calib-card-ref">
+        <span style="font-size:1.6rem;">💳</span>
+        <strong>悠遊卡 ／ 信用卡</strong>
+        <span style="font-size:0.7rem;">85.6 × 54 mm</span>
+      </div>
+    </div>
+    <div class="calib-hint">
+      請拿出您的悠遊卡或任何信用卡，貼在螢幕上對準虛線框。<br>
+      若大小不一致，請按 <kbd>Ctrl</kbd> <kbd>+</kbd> / <kbd>Ctrl</kbd> <kbd>-</kbd>（Mac：<kbd>⌘ +</kbd> / <kbd>⌘ -</kbd>）調整瀏覽器縮放比例，直到框框與卡片大小吻合，再點下方按鈕。
+    </div>
+    <div class="calib-actions">
+      <button class="calib-cancel" onclick="closeCalibration()">取消</button>
+      <button class="calib-confirm" onclick="confirmActualSize()">對準了，進入預覽 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 首次進入引導 Modal ── -->
+<div class="onboard-overlay hidden no-print" id="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
+  <div class="onboard-box">
+    <div class="onboard-logo" id="onboard-title">SafeCard</div>
+    <div class="onboard-sub">防災避難聯絡卡產生器</div>
+    <div class="onboard-steps">
+      <div class="onboard-step">
+        <div class="onboard-step-num">1</div>
+        <div class="onboard-step-text">
+          <strong>填寫個人與緊急資訊</strong>
+          <span>姓名、緊急聯絡人、避難地點、過敏史等，左側表單依序填入。</span>
+        </div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">2</div>
+        <div class="onboard-step-text">
+          <strong>即時預覽卡片內容</strong>
+          <span>右側即時顯示卡片外觀，可切換「避難聯絡卡」、「醫療資訊卡」、「寵物資料卡」三種類型。</span>
+        </div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">3</div>
+        <div class="onboard-step-text">
+          <strong>列印並護貝</strong>
+          <span>點擊「🖨️ 列印」輸出卡片，沿邊緣剪下後護貝，放入避難包或隨身攜帶。</span>
+        </div>
+      </div>
+    </div>
+    <div class="onboard-privacy">
+      🔒&nbsp;<span>本工具<strong>不傳送任何資料至伺服器</strong>，所有資訊僅存在於您的瀏覽器記憶體中，關閉頁面即消失。</span>
+    </div>
+    <button class="onboard-btn" id="onboard-start" onclick="dismissOnboard()">開始填寫</button>
+    <p style="margin-top:16px;text-align:center;font-size:0.72rem;color:var(--mid);line-height:1.6;">
+      由 <a href="https://claire-cheng.com/zh" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;font-weight:600;">Claire Cheng</a> 開發 ·
+      <a href="https://github.com/Legendream/safecard" target="_blank" rel="noopener" style="color:var(--mid);text-decoration:none;">GitHub</a> ·
+      MIT 授權
+    </p>
+  </div>
+</div>
+
 <!-- ── Banner ── -->
 <header class="banner no-print">
   <h1>SafeCard 防災避難聯絡卡</h1>
+  <div class="font-size-ctrl no-print">
+    <span>字級</span>
+    <button class="fs-btn" data-fs="S" onclick="setFontSize('S')">小</button>
+    <button class="fs-btn" data-fs="M" onclick="setFontSize('M')">中</button>
+    <button class="fs-btn" data-fs="L" onclick="setFontSize('L')">大</button>
+  </div>
   <div class="privacy-notice">🔒 本工具不儲存任何資料，所有資訊僅存在於瀏覽器記憶體中</div>
 </header>
 
@@ -398,7 +653,11 @@
   <button class="tab-btn active"
     role="tab" aria-selected="true"
     aria-controls="tab-human" id="tab-btn-human"
-    onclick="switchTab('human')">緊急聯絡小卡</button>
+    onclick="switchTab('human')">避難聯絡卡</button>
+  <button class="tab-btn"
+    role="tab" aria-selected="false"
+    aria-controls="tab-med" id="tab-btn-med"
+    onclick="switchTab('med')">醫療資訊卡</button>
   <button class="tab-btn"
     role="tab" aria-selected="false"
     aria-controls="tab-pet" id="tab-btn-pet"
@@ -423,19 +682,9 @@
       <input type="text" id="name" placeholder="王小明" autocomplete="name" oninput="sync()">
     </div>
 
-    <div class="field-row">
-      <div class="field">
-        <label for="dob">出生年月日</label>
-        <input type="date" id="dob" autocomplete="bday" oninput="sync()">
-      </div>
-      <div class="field">
-        <label for="blood">血型</label>
-        <select id="blood" onchange="sync()">
-          <option value="">— 選擇 —</option>
-          <option>A</option><option>B</option><option>O</option><option>AB</option>
-          <option value="?">不確定</option>
-        </select>
-      </div>
+    <div class="field">
+      <label for="dob">出生年月日</label>
+      <input type="date" id="dob" autocomplete="bday" oninput="sync()">
     </div>
 
     <div class="field">
@@ -447,26 +696,29 @@
 
     <div class="field">
       <label for="allergy">過敏史</label>
-      <p class="field-hint">卡片限顯示 10 字，超出將被截斷。</p>
-      <textarea id="allergy" placeholder="例：青黴素、花生、海鮮…" maxlength="10" oninput="sync()"></textarea>
+      <p class="field-hint">可用 Enter 換行，卡片最多顯示兩行。</p>
+      <textarea id="allergy" placeholder="例：青黴素、花生、海鮮…" maxlength="50" oninput="sync()"></textarea>
+      <p class="field-warn" id="allergy-warn">⚠ 文字超出卡片顯示範圍，超出部分不會印出。</p>
     </div>
 
     <div class="field">
       <label for="medical">病史</label>
-      <p class="field-hint">卡片限顯示 10 字，超出將被截斷。</p>
-      <textarea id="medical" placeholder="例：高血壓、糖尿病、心臟病…" maxlength="10" oninput="sync()"></textarea>
+      <p class="field-hint">可用 Enter 換行，卡片最多顯示兩行。</p>
+      <textarea id="medical" placeholder="例：高血壓、糖尿病、心臟病…" maxlength="50" oninput="sync()"></textarea>
+      <p class="field-warn" id="medical-warn">⚠ 文字超出卡片顯示範圍，超出部分不會印出。</p>
     </div>
 
     <div class="field">
       <label for="instruction">急救指示</label>
-      <p class="field-hint">填寫救援者看到此卡應立即採取的行動。卡片限顯示 25 字。</p>
-      <textarea id="instruction" placeholder="例：我有低血糖，請給我口袋裡的糖果。／請取出背包中的胰島素筆。" maxlength="25" oninput="sync()"></textarea>
+      <p class="field-hint">填寫救援者看到此卡應立即採取的行動。可用 Enter 換行。</p>
+      <textarea id="instruction" placeholder="例：我有低血糖，請給我口袋裡的糖果。／請取出背包中的胰島素筆。" maxlength="100" oninput="sync()"></textarea>
+      <p class="field-warn" id="instruction-warn">⚠ 文字超出卡片顯示範圍，超出部分不會印出。</p>
     </div>
 
     <div class="section-title">背面 — 緊急聯絡</div>
 
     <div class="field">
-      <label id="c1-label">緊急聯絡人 1</label>
+      <label id="c1-label">聯絡人 1</label>
       <div class="field-row3" role="group" aria-labelledby="c1-label">
         <input type="text" id="c1name" placeholder="姓名" aria-label="聯絡人1姓名" oninput="sync()">
         <input type="text" id="c1rel"  placeholder="關係" aria-label="聯絡人1關係" oninput="sync()">
@@ -475,11 +727,21 @@
     </div>
 
     <div class="field">
-      <label id="c2-label">緊急聯絡人 2</label>
+      <label id="c2-label">聯絡人 2</label>
       <div class="field-row3" role="group" aria-labelledby="c2-label">
         <input type="text" id="c2name" placeholder="姓名" aria-label="聯絡人2姓名" oninput="sync()">
         <input type="text" id="c2rel"  placeholder="關係" aria-label="聯絡人2關係" oninput="sync()">
         <input type="tel"  id="c2tel"  placeholder="電話" aria-label="聯絡人2電話" autocomplete="tel" oninput="sync()">
+      </div>
+    </div>
+
+    <div class="field">
+      <label id="c3-label">外地聯絡人</label>
+      <p class="field-hint">填寫外縣市或海外親友。災難時本地電話常壅塞，外地聯絡人可作為家人之間的轉話中心。</p>
+      <div class="field-row3" role="group" aria-labelledby="c3-label">
+        <input type="text" id="c3name" placeholder="姓名" aria-label="外地聯絡人姓名" oninput="sync()">
+        <input type="text" id="c3rel"  placeholder="關係" aria-label="外地聯絡人關係" oninput="sync()">
+        <input type="tel"  id="c3tel"  placeholder="電話" aria-label="外地聯絡人電話" autocomplete="tel" oninput="sync()">
       </div>
     </div>
 
@@ -497,12 +759,32 @@
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
+    <div class="preview-ctrl no-print">
+      <button class="actual-size-btn" id="actual-size-btn-human" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
+    </div>
+    <div class="actual-size-notice no-print" id="actual-size-notice-human">
+      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
+    </div>
     <div class="preview-block">
       <div class="preview-label">卡片正面預覽</div>
       <div class="h-wrapper">
         <div class="emergency-card" id="preview-front" aria-hidden="true"></div>
       </div>
-      <div class="size-tag">📐 90 × 54 mm · 標準名片尺寸，與信用卡相近</div>
+      <div class="size-hint">
+        <div class="size-comp">
+          <div class="size-comp-item">
+            <div class="size-comp-rect this-card" style="width:34px;height:21px;"></div>
+            <span class="size-comp-label">本卡</span>
+          </div>
+          <span class="size-comp-sep">|</span>
+          <div class="size-comp-item">
+            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
+            <span class="size-comp-label">悠遊卡</span>
+          </div>
+        </div>
+        <div class="size-tag">📐 90 × 54 mm · 與悠遊卡相同大小</div>
+      </div>
     </div>
     <div class="preview-block">
       <div class="preview-label">卡片背面預覽</div>
@@ -513,10 +795,157 @@
   </section>
 </div>
 
+<!-- ════════════ 醫療資訊卡 Tab ════════════ -->
+<div class="main no-print" id="tab-med" role="tabpanel" aria-labelledby="tab-btn-med" hidden>
+
+  <aside class="form-panel">
+    <div class="section-title">正面 — 基本資料與病史</div>
+
+    <div class="field">
+      <label for="m_name">姓名</label>
+      <input type="text" id="m_name" placeholder="王小明" autocomplete="name" oninput="syncMed()">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="m_dob">出生年月日</label>
+        <input type="date" id="m_dob" autocomplete="bday" oninput="syncMed()">
+      </div>
+      <div class="field">
+        <label for="m_blood">血型</label>
+        <select id="m_blood" onchange="syncMed()">
+          <option value="">— 選擇 —</option>
+          <option>A</option><option>B</option><option>O</option><option>AB</option>
+          <option value="?">不確定</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="m_nhi">健保卡號</label>
+      <p class="field-hint">急診掛號與確認身分用。若有疑慮，可留空，列印後手寫補填。</p>
+      <input type="text" id="m_nhi" placeholder="A123456789" autocomplete="off" oninput="syncMed()">
+    </div>
+
+    <div class="field">
+      <label for="m_drug_allergy">藥物過敏</label>
+      <textarea id="m_drug_allergy" placeholder="例：青黴素、磺胺類藥物…" oninput="syncMed()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="m_food_allergy">食物過敏</label>
+      <textarea id="m_food_allergy" placeholder="例：花生、海鮮、乳製品…" oninput="syncMed()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="m_condition">慢性病 ／ 醫療狀況</label>
+      <textarea id="m_condition" placeholder="例：高血壓、第二型糖尿病、心臟病…" oninput="syncMed()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="m_medication">目前用藥</label>
+      <textarea id="m_medication" placeholder="例：降血壓藥（早）、胰島素（三餐後）…" oninput="syncMed()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="m_implant">植入醫療器材（選填）</label>
+      <p class="field-hint">心律調整器、人工關節、胰島素幫浦等，影響急救處置與影像檢查。</p>
+      <input type="text" id="m_implant" placeholder="例：心律調整器（2022年裝）" oninput="syncMed()">
+    </div>
+
+    <div class="section-title">背面 — 急救指示與聯絡</div>
+
+    <div class="field">
+      <label for="m_instruction">急救指示</label>
+      <p class="field-hint">填寫救援者看到此卡應立即採取的行動。</p>
+      <textarea id="m_instruction" placeholder="例：我有低血糖，請給我口袋裡的糖果。／請取出背包中的胰島素筆。" oninput="syncMed()"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="m_organ_donor">器官捐贈意願（選填）</label>
+      <select id="m_organ_donor" onchange="syncMed()">
+        <option value="">— 選擇 —</option>
+        <option value="願意捐贈">願意捐贈</option>
+        <option value="不捐贈">不捐贈</option>
+        <option value="依家屬決定">依家屬決定</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label id="mc1-label">緊急聯絡人</label>
+      <div class="field-row3" role="group" aria-labelledby="mc1-label">
+        <input type="text" id="m_cname" placeholder="姓名" aria-label="緊急聯絡人姓名" oninput="syncMed()">
+        <input type="text" id="m_crel"  placeholder="關係" aria-label="緊急聯絡人關係" oninput="syncMed()">
+        <input type="tel"  id="m_ctel"  placeholder="電話" aria-label="緊急聯絡人電話" autocomplete="tel" oninput="syncMed()">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="m_hospital">就診醫院</label>
+      <input type="text" id="m_hospital" placeholder="○○醫院" oninput="syncMed()">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="m_doctor">主治醫師</label>
+        <input type="text" id="m_doctor" placeholder="陳醫師" oninput="syncMed()">
+      </div>
+      <div class="field">
+        <label for="m_hospital_tel">醫院電話</label>
+        <input type="tel" id="m_hospital_tel" placeholder="02-1234-5678" autocomplete="tel" oninput="syncMed()">
+      </div>
+    </div>
+
+    <div id="print-panel-med"></div>
+  </aside>
+
+  <section class="preview-panel" aria-label="卡片預覽">
+    <div class="preview-ctrl no-print">
+      <button class="actual-size-btn" id="actual-size-btn-med" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
+    </div>
+    <div class="actual-size-notice no-print" id="actual-size-notice-med">
+      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
+    </div>
+    <div class="preview-block">
+      <div class="preview-label">卡片正面預覽</div>
+      <div class="m-wrapper">
+        <div class="medical-card" id="preview-med-front" aria-hidden="true"></div>
+      </div>
+      <div class="size-hint">
+        <div class="size-comp">
+          <div class="size-comp-item">
+            <div class="size-comp-rect this-card" style="width:28px;height:40px;"></div>
+            <span class="size-comp-label">本卡</span>
+          </div>
+          <span class="size-comp-sep" style="padding-bottom:24px;">|</span>
+          <div class="size-comp-item">
+            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
+            <span class="size-comp-label">悠遊卡</span>
+          </div>
+        </div>
+        <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
+      </div>
+    </div>
+    <div class="preview-block">
+      <div class="preview-label">卡片背面預覽</div>
+      <div class="m-wrapper">
+        <div class="medical-card" id="preview-med-back" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
 <!-- ════════════ 寵物卡 Tab ════════════ -->
 <div class="main no-print" id="tab-pet" role="tabpanel" aria-labelledby="tab-btn-pet" hidden>
 
   <aside class="form-panel">
+    <div class="pet-handbook-tip">
+      <span style="font-size:1.1rem;flex-shrink:0;">📖</span>
+      <span>建議搭配<strong>《動物夥伴防災避難手冊》</strong>使用，讓您與毛孩的避難準備更完整。
+        <br><a href="https://drive.google.com/file/d/1TA4cQLzIC9qdBmCfgy5ABKAFTOQHdcD5/view" target="_blank" rel="noopener">點此開啟手冊 →</a>
+      </span>
+    </div>
     <div class="section-title">基本資料</div>
     <div class="field">
       <label for="pet_photo_input">寵物照片（選填）</label>
@@ -810,12 +1239,32 @@
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
+    <div class="preview-ctrl no-print">
+      <button class="actual-size-btn" id="actual-size-btn-pet" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
+    </div>
+    <div class="actual-size-notice no-print" id="actual-size-notice-pet">
+      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
+    </div>
     <div class="preview-block">
       <div class="preview-label">正面預覽</div>
       <div class="p-wrapper">
         <div class="pet-card" id="preview-pet-front" aria-hidden="true"></div>
       </div>
-      <div class="size-tag">📐 74 × 105 mm · A7 尺寸</div>
+      <div class="size-hint">
+        <div class="size-comp">
+          <div class="size-comp-item">
+            <div class="size-comp-rect this-card" style="width:28px;height:40px;"></div>
+            <span class="size-comp-label">本卡</span>
+          </div>
+          <span class="size-comp-sep" style="padding-bottom:24px;">|</span>
+          <div class="size-comp-item">
+            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
+            <span class="size-comp-label">悠遊卡</span>
+          </div>
+        </div>
+        <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
+      </div>
     </div>
     <div class="preview-block">
       <div class="preview-label">背面預覽</div>
@@ -851,16 +1300,28 @@
     </div>
   </div>
 </div>
+<div class="print-med">
+  <div class="print-cards-wrap">
+    <div>
+      <span class="cut-hint">▼ 請沿線剪下（正面）</span>
+      <div class="m-wrapper"><div class="medical-card" id="print-med-front"></div></div>
+    </div>
+    <div>
+      <span class="cut-hint">▼ 請沿線剪下（背面）</span>
+      <div class="m-wrapper"><div class="medical-card" id="print-med-back"></div></div>
+    </div>
+  </div>
+</div>
 
 <script>
   const $ = id => document.getElementById(id);
   const val = id => { const el = $(id); return el ? el.value.trim() : ''; };
 
-  // ── #3 Tab 切換：更新 aria-selected ──────────────
+  // ── Tab 切換 ──────────────────────────────────────
+  const TAB_ORDER = ['human', 'med', 'pet'];
   function switchTab(tab) {
     document.body.dataset.tab = tab;
-    $('tab-human').hidden = (tab !== 'human');
-    $('tab-pet').hidden   = (tab !== 'pet');
+    TAB_ORDER.forEach(t => { const p = $(`tab-${t}`); if (p) p.hidden = (t !== tab); });
     document.querySelectorAll('[role="tab"]').forEach(btn => {
       const active = btn.getAttribute('aria-controls') === `tab-${tab}`;
       btn.classList.toggle('active', active);
@@ -868,23 +1329,35 @@
     });
   }
 
-  // ── #3 Tab 鍵盤導航（方向鍵）──────────────────────
+  // ── Tab 鍵盤導航（方向鍵循環）─────────────────────
   document.querySelector('[role="tablist"]').addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { switchTab('pet');   $('tab-btn-pet').focus(); }
-    if (e.key === 'ArrowLeft')  { switchTab('human'); $('tab-btn-human').focus(); }
+    const idx = TAB_ORDER.indexOf(document.body.dataset.tab);
+    if (e.key === 'ArrowRight') {
+      const next = TAB_ORDER[(idx + 1) % TAB_ORDER.length];
+      switchTab(next); $(`tab-btn-${next}`).focus();
+    }
+    if (e.key === 'ArrowLeft') {
+      const prev = TAB_ORDER[(idx - 1 + TAB_ORDER.length) % TAB_ORDER.length];
+      switchTab(prev); $(`tab-btn-${prev}`).focus();
+    }
   });
 
   // ── 離頁保護 ──────────────────────────────────────
-  const HUMAN_FIELDS = ['name','blood','idnum','dob','allergy','medical','instruction',
-                        'c1name','c1tel','c1rel','c2name','c2tel','c2rel','loc1','loc2'];
-  const PET_FIELDS   = ['p_name','p_species','p_gender','p_breed','p_dob','p_desc',
-                        'p_chip','p_chip_id','p_tag','p_tag_desc','p_id_other',
-                        'p_owner','p_owner_tel','p_owner_contact','p_owner_addr',
-                        'p_neutered','p_drug_allergy','p_vac1','p_vac1_date','p_vac2','p_vac2_date',
-                        'p_food_note','p_vet_hospital','p_vet_name','p_vet_tel','p_vet_addr'];
+  const HUMAN_FIELDS   = ['name','idnum','dob','allergy','medical','instruction',
+                          'c1name','c1tel','c1rel','c2name','c2tel','c2rel',
+                          'c3name','c3tel','c3rel','loc1','loc2'];
+  const MEDICAL_FIELDS = ['m_name','m_blood','m_dob','m_nhi',
+                          'm_drug_allergy','m_food_allergy','m_condition',
+                          'm_medication','m_implant','m_instruction','m_organ_donor',
+                          'm_cname','m_crel','m_ctel','m_hospital','m_doctor','m_hospital_tel'];
+  const PET_FIELDS     = ['p_name','p_species','p_gender','p_breed','p_dob','p_desc',
+                          'p_chip','p_chip_id','p_tag','p_tag_desc','p_id_other',
+                          'p_owner','p_owner_tel','p_owner_contact','p_owner_addr',
+                          'p_neutered','p_drug_allergy','p_vac1','p_vac1_date','p_vac2','p_vac2_date',
+                          'p_food_note','p_vet_hospital','p_vet_name','p_vet_tel','p_vet_addr'];
   window.addEventListener('beforeunload', e => {
     const hasDynamic = Array.from(document.querySelectorAll('#pet-med-list input, #pet-meal-list input')).some(el => el.value.trim());
-    if ([...HUMAN_FIELDS,...PET_FIELDS].some(id => val(id)) || hasDynamic) {
+    if ([...HUMAN_FIELDS,...MEDICAL_FIELDS,...PET_FIELDS].some(id => val(id)) || hasDynamic) {
       e.preventDefault(); e.returnValue = '';
     }
   });
@@ -896,55 +1369,55 @@
   const PV = (v, ph='—') => v || `<em style="color:#bbb">${ph}</em>`;
   const R  = (k, v) => `<div class="pet-row"><span class="pet-key">${k}</span><span class="pet-val">${PV(v)}</span></div>`;
 
-  // ── 人類卡：正面 ──────────────────────────────────
+  // ── 避難聯絡卡：正面 ─────────────────────────────
   function buildFront() {
-    const name=val('name'), blood=val('blood'), dob=val('dob'),
+    const name=val('name'), dob=val('dob'),
           idnum=val('idnum'), allergy=val('allergy'), medical=val('medical'),
           instruction=val('instruction');
-    const bloodBadge = blood
-      ? `<span class="blood-badge">${blood}</span>`
-      : `<span class="blood-badge" style="background:#999">?</span>`;
     const dobFmt = dob ? dob.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
     const photoHtml = humanPhoto
       ? `<img src="${humanPhoto}" alt="大頭照">`
       : `貼照片`;
     return `
       <div class="card-header">
-        <span class="card-title">緊急聯絡小卡</span>
+        <span class="card-title">避難聯絡卡</span>
         <span class="card-side-label">正面</span>
       </div>
       <div class="card-body">
         <div class="card-front-row">
           <div class="card-front-fields">
             <div class="card-row">
-              <span class="card-key">姓名</span>${V(name,'未填寫')}${bloodBadge}
+              <span class="card-key">姓名</span>${V(name,'未填寫')}
             </div>
             <div class="card-row">
               <span class="card-key">生日</span>${V(dobFmt)}
               <span class="card-key" style="margin-left:2mm">身分證</span>${V(idnum)}
             </div>
             <hr class="card-divider">
-            <div class="card-med-row">
-              <div class="card-med-col">
-                <span class="card-key">過敏史</span>
-                <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1mm;min-height:0;">
+              <div class="card-med-row" style="flex:1;min-height:0;">
+                <div class="card-med-col">
+                  <span class="card-key">過敏史</span>
+                  <span class="card-val" style="white-space:pre-line;overflow:hidden;flex:1;min-height:0;border-bottom:none;">${allergy||'<em style="color:#bbb">無</em>'}</span>
+                </div>
+                <div class="card-med-col">
+                  <span class="card-key">病史</span>
+                  <span class="card-val" style="white-space:pre-line;overflow:hidden;flex:1;min-height:0;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
+                </div>
               </div>
-              <div class="card-med-col">
-                <span class="card-key">病史</span>
-                <span class="card-val" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;border-bottom:none;">${medical||'<em style="color:#bbb">無</em>'}</span>
-              </div>
+              ${instruction ? `<div class="card-instruction"><span class="card-instruction-label">急救指示</span>${instruction}</div>` : ''}
             </div>
-            ${instruction ? `<div class="card-instruction"><span class="card-instruction-label">急救指示</span>${instruction}</div>` : ''}
           </div>
           <div class="card-photo-box">${photoHtml}</div>
         </div>
       </div>`;
   }
 
-  // ── 人類卡：背面（#4 移除 emoji section title）────
+  // ── 避難聯絡卡：背面 ─────────────────────────────
   function buildBack() {
     const c1name=val('c1name'),c1rel=val('c1rel'),c1tel=val('c1tel');
     const c2name=val('c2name'),c2rel=val('c2rel'),c2tel=val('c2tel');
+    const c3name=val('c3name'),c3rel=val('c3rel'),c3tel=val('c3tel');
     const loc1=val('loc1'), loc2=val('loc2');
     const cRow = (n,r,t) => {
       const nr = [n, r?`（${r})`:''].filter(Boolean).join('')||'<em style="color:#bbb">未填</em>';
@@ -953,14 +1426,24 @@
         <span class="card-val">${t||'<em style="color:#bbb">—</em>'}</span>
       </div>`;
     };
+    const extRow = (n,r,t) => {
+      const nr = [n, r?`（${r})`:''].filter(Boolean).join('')||'<em style="color:#bbb">未填</em>';
+      return `<div class="card-row">
+        <span class="card-key" style="color:var(--blue);white-space:nowrap">外地</span>
+        <span class="card-val" style="flex:none;max-width:44%;">${nr}</span>
+        <span class="card-val">${t||'<em style="color:#bbb">—</em>'}</span>
+      </div>`;
+    };
     return `
       <div class="card-header">
-        <span class="card-title">緊急聯絡小卡</span>
+        <span class="card-title">避難聯絡卡</span>
         <span class="card-side-label">背面</span>
       </div>
       <div class="card-body">
         <div class="card-section-title">緊急聯絡人</div>
-        ${cRow(c1name,c1rel,c1tel)}${cRow(c2name,c2rel,c2tel)}
+        ${cRow(c1name,c1rel,c1tel)}
+        ${cRow(c2name,c2rel,c2tel)}
+        ${extRow(c3name,c3rel,c3tel)}
         <hr class="card-divider">
         <div class="card-section-title">避難地點</div>
         <div class="card-row"><span class="card-key">主要</span><span class="card-val">${loc1||'<em style="color:#bbb">未填寫</em>'}</span></div>
@@ -968,11 +1451,28 @@
       </div>`;
   }
 
+  function isOverflowing(el) {
+    if (!el) return false;
+    return el.scrollHeight > el.offsetHeight + 1;
+  }
+
+  function checkOverflow() {
+    [
+      ['allergy-warn',     '#preview-front .card-med-row .card-med-col:first-child .card-val'],
+      ['medical-warn',     '#preview-front .card-med-row .card-med-col:last-child .card-val'],
+      ['instruction-warn', '#preview-front .card-instruction'],
+    ].forEach(([warnId, sel]) => {
+      const warn = document.getElementById(warnId);
+      if (warn) warn.classList.toggle('visible', isOverflowing(document.querySelector(sel)));
+    });
+  }
+
   function sync() {
     const f = buildFront(), b = buildBack();
     $('preview-front').innerHTML = f; $('print-front').innerHTML = f;
     $('preview-back').innerHTML  = b; $('print-back').innerHTML  = b;
     if (typeof reapplyXf === 'function') reapplyXf();
+    checkOverflow();
   }
 
   // ── 寵物卡：正面（#4 移除 emoji section title）────
@@ -1004,7 +1504,7 @@
             </div>
             ${R('品種', breed)}
             ${R('生日', dobFmt)}
-            <div class="pet-row" style="align-items:flex-start"><span class="pet-key">外觀</span><span class="pet-val" style="white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${PV(desc)}</span></div>
+            <div class="pet-row" style="align-items:flex-start"><span class="pet-key">外觀</span><span class="pet-val" style="white-space:pre-line;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${PV(desc)}</span></div>
           </div>
           <div class="pet-photo">${petPhoto ? `<img src="${petPhoto}" alt="寵物照片">` : '貼照片<br><span style="font-size:5pt;color:#aaa">建議含飼主合照</span>'}</div>
         </div>
@@ -1022,9 +1522,9 @@
             ${R('其他特徵', idOther)}
           </div>
         </div>
-        <div class="pet-section">
+        <div class="pet-section" style="flex:1;display:flex;flex-direction:column;">
           <div class="pet-section-title">用藥</div>
-          <div class="pet-section-rows">
+          <div class="pet-section-rows" style="flex:1;">
             ${medEntries.map((e, i) => {
               const n = medEntries.length > 1 ? (i+1) : '';
               const drugInfo = [e.med, e.purpose, e.freq].filter(Boolean).join(' ｜ ');
@@ -1106,6 +1606,113 @@
     $('preview-pet-front').innerHTML = f; $('print-pet-front').innerHTML = f;
     $('preview-pet-back').innerHTML  = b; $('print-pet-back').innerHTML  = b;
     if (typeof reapplyXf === 'function') reapplyXf();
+  }
+
+  // ── 醫療資訊卡：正面 ─────────────────────────────
+  function buildMedFront() {
+    const name=val('m_name'), blood=val('m_blood'), dob=val('m_dob'),
+          nhi=val('m_nhi'), drugAllergy=val('m_drug_allergy'),
+          foodAllergy=val('m_food_allergy'), condition=val('m_condition'),
+          medication=val('m_medication'), implant=val('m_implant');
+    const bloodBadge = blood
+      ? `<span class="blood-badge">${blood}</span>`
+      : `<span class="blood-badge" style="background:#999">?</span>`;
+    const dobFmt = dob ? dob.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
+    const multiVal = (v, ph, clamp=2) =>
+      `<span class="pet-val" style="white-space:normal;display:-webkit-box;-webkit-line-clamp:${clamp};-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${v||`<em style="color:#bbb">${ph}</em>`}</span>`;
+    return `
+      <div class="card-header">
+        <span class="card-title">個人醫療資訊卡</span>
+        <span class="card-side-label">正面</span>
+      </div>
+      <div class="pet-body">
+        <div class="pet-section">
+          <div class="pet-section-title">基本資料</div>
+          <div class="pet-section-rows">
+            <div class="pet-row">
+              <span class="pet-key">姓名</span>
+              <span class="pet-val">${name||'<em style="color:#bbb">未填寫</em>'}</span>
+              ${bloodBadge}
+            </div>
+            ${R('生日', dobFmt)}
+            ${R('健保卡號', nhi)}
+          </div>
+        </div>
+        <div class="pet-section">
+          <div class="pet-section-title">過敏</div>
+          <div class="pet-section-rows">
+            <div class="pet-row"><span class="pet-key">藥物</span>${multiVal(drugAllergy,'無')}</div>
+            <div class="pet-row"><span class="pet-key">食物</span>${multiVal(foodAllergy,'無')}</div>
+          </div>
+        </div>
+        <div class="pet-section" style="flex:1;display:flex;flex-direction:column;">
+          <div class="pet-section-title">慢性病 ／ 醫療狀況</div>
+          <div style="border-left:2.5px solid var(--blue-lt);padding-left:2mm;flex:1;min-height:0;overflow:hidden;">
+            <span style="font-size:7pt;line-height:1.4;white-space:pre-line;display:block;">${condition||'<em style="color:#bbb">無</em>'}</span>
+          </div>
+        </div>
+        <div class="pet-section" style="flex:1;display:flex;flex-direction:column;">
+          <div class="pet-section-title">目前用藥</div>
+          <div style="border-left:2.5px solid var(--blue-lt);padding-left:2mm;flex:1;min-height:0;overflow:hidden;">
+            <span style="font-size:7pt;line-height:1.4;white-space:pre-line;display:block;">${medication||'<em style="color:#bbb">無</em>'}</span>
+          </div>
+        </div>
+        ${implant ? `<div class="pet-section">
+          <div class="pet-section-title">植入器材</div>
+          <div class="pet-section-rows">
+            <div class="pet-row"><span class="pet-val" style="white-space:normal;overflow:hidden;border-bottom:none;">${implant}</span></div>
+          </div>
+        </div>` : ''}
+      </div>`;
+  }
+
+  // ── 醫療資訊卡：背面 ─────────────────────────────
+  function buildMedBack() {
+    const instruction=val('m_instruction'), organDonor=val('m_organ_donor'),
+          cname=val('m_cname'), crel=val('m_crel'), ctel=val('m_ctel'),
+          hospital=val('m_hospital'), doctor=val('m_doctor'),
+          hospitalTel=val('m_hospital_tel');
+    const cnameRel = [cname, crel?`（${crel})`:''].filter(Boolean).join('');
+    return `
+      <div class="card-header">
+        <span class="card-title">個人醫療資訊卡</span>
+        <span class="card-side-label">背面</span>
+      </div>
+      <div class="pet-body">
+        <div class="pet-section" style="flex:1;display:flex;flex-direction:column;">
+          <div class="pet-section-title">急救指示</div>
+          <div style="flex:1;min-height:0;background:var(--blue-lt);border-left:3px solid var(--blue);padding:1.5mm 2mm;border-radius:0 2px 2px 0;margin-top:1mm;overflow:hidden;">
+            <span style="font-size:7.5pt;line-height:1.5;white-space:pre-line;display:block;color:var(--text);">${instruction||'<em style="color:#aaa">未填寫</em>'}</span>
+          </div>
+        </div>
+        ${organDonor ? `<div class="pet-section">
+          <div class="pet-section-title">器官捐贈</div>
+          <div class="pet-section-rows">${R('意願', organDonor)}</div>
+        </div>` : ''}
+        <div class="pet-section">
+          <div class="pet-section-title">緊急聯絡人</div>
+          <div class="pet-section-rows">
+            ${cnameRel ? `<div class="pet-row"><span class="pet-key">姓名</span><span class="pet-val">${cnameRel}</span></div>` : ''}
+            ${R('電話', ctel)}
+          </div>
+        </div>
+        <div class="pet-section">
+          <div class="pet-section-title">家庭醫師 ／ 醫院</div>
+          <div class="pet-section-rows">
+            <div class="pet-row">
+              <span class="pet-key">醫院</span><span class="pet-val">${PV(hospital)}</span>
+              ${doctor ? `<span class="pet-key" style="margin-left:2mm">醫師</span><span class="pet-val">${doctor}</span>` : ''}
+            </div>
+            ${R('電話', hospitalTel)}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function syncMed() {
+    const f = buildMedFront(), b = buildMedBack();
+    $('preview-med-front').innerHTML = f; $('print-med-front').innerHTML = f;
+    $('preview-med-back').innerHTML  = b; $('print-med-back').innerHTML  = b;
   }
 
   function addMedEntry() {
@@ -1330,10 +1937,81 @@
       <p class="print-hint">${hint}</p>`;
   }
 
+  let actualSizeMode = false;
+
+  function toggleActualSize() {
+    if (actualSizeMode) exitActualSize();
+    else document.getElementById('calib-overlay').classList.remove('hidden');
+  }
+
+  function closeCalibration() {
+    document.getElementById('calib-overlay').classList.add('hidden');
+  }
+
+  function confirmActualSize() {
+    closeCalibration();
+    actualSizeMode = true;
+    document.documentElement.style.setProperty('--hs', '1');
+    document.documentElement.style.setProperty('--ps', '1');
+    document.documentElement.style.setProperty('--ms', '1');
+    updateActualSizeUI();
+  }
+
+  function exitActualSize() {
+    actualSizeMode = false;
+    document.documentElement.style.removeProperty('--hs');
+    document.documentElement.style.removeProperty('--ps');
+    document.documentElement.style.removeProperty('--ms');
+    updateActualSizeUI();
+  }
+
+  function updateActualSizeUI() {
+    document.querySelectorAll('.actual-size-btn').forEach(btn => {
+      btn.classList.toggle('active', actualSizeMode);
+      btn.textContent = actualSizeMode ? '📏 退出實際尺寸' : '📏 實際尺寸預覽';
+    });
+    document.querySelectorAll('.actual-size-notice').forEach(n => {
+      n.classList.toggle('visible', actualSizeMode);
+    });
+  }
+
+  function dismissOnboard() {
+    document.getElementById('onboard-overlay').classList.add('hidden');
+    localStorage.setItem('safecard-onboarded', '1');
+  }
+
+  function initOnboard() {
+    if (!localStorage.getItem('safecard-onboarded')) {
+      const overlay = document.getElementById('onboard-overlay');
+      overlay.classList.remove('hidden');
+      document.getElementById('onboard-start').focus();
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') dismissOnboard();
+  });
+
+  function setFontSize(size) {
+    const map = { S: '14px', M: '16px', L: '20px' };
+    document.documentElement.style.fontSize = map[size] || '16px';
+    document.body.dataset.fontsize = size;
+    localStorage.setItem('safecard-fontsize', size);
+    document.querySelectorAll('.fs-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.fs === size);
+    });
+  }
+  setFontSize(localStorage.getItem('safecard-fontsize') || 'M');
+  initOnboard();
+
   sync();
   syncPet();
+  syncMed();
   $('print-panel-human').innerHTML = buildPrintPanel(
     '列印後沿邊緣剪下，護貝後放入避難包。<br>建議列印 2 份，分別放置於家中與隨身袋。'
+  );
+  $('print-panel-med').innerHTML = buildPrintPanel(
+    '列印後沿邊緣剪下，護貝後隨身攜帶，或放入避難包。<br>建議同時攜帶健保卡正本。'
   );
   $('print-panel-pet').innerHTML = buildPrintPanel(
     '列印後沿裁切線剪下，護貝後放入外出袋。'
@@ -1363,7 +2041,7 @@
       photoScript.textContent =
         (humanPhoto ? `humanPhoto=${JSON.stringify(humanPhoto)};` : '') +
         (petPhoto   ? `petPhoto=${JSON.stringify(petPhoto)};`     : '') +
-        'sync();syncPet();';
+        'sync();syncPet();syncMed();';
       clone.querySelector('body').appendChild(photoScript);
     }
     const html = '<!DOCTYPE html>\n' + clone.outerHTML;
@@ -1375,6 +2053,17 @@
     URL.revokeObjectURL(a.href);
   }
 </script>
+
+<footer class="no-print" style="
+  background: var(--navy); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 16px 28px; font-size: 0.72rem; line-height: 1.8;
+">
+  © 2025 <a href="https://claire-cheng.com/zh" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.8);text-decoration:none;font-weight:600;">Claire Cheng</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/Legendream/safecard" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.55);text-decoration:none;">GitHub</a>
+  &nbsp;·&nbsp;
+  MIT License
+</footer>
 
 </body>
 </html>
