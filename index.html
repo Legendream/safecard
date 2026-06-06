@@ -18,9 +18,10 @@
       --bg:      #FFF7ED;
       --white:   #ffffff;
       --font:    system-ui, 'Noto Sans TC', 'PingFang TC', sans-serif;
-      --hw: 90mm; --hh: 54mm; --hs: 1.6;
-      --pw: 74mm; --ph: 105mm; --ps: 1.6;
-      --mw: 74mm; --mh: 105mm; --ms: 1.6;
+      --hw: 90mm; --hh: 54mm; --hs: 1.2;
+      --pw: 74mm; --ph: 105mm; --ps: 1.25;
+      --mw: 74mm; --mh: 105mm; --ms: 1.25;
+      --stick: 132px;
     }
 
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
@@ -29,13 +30,18 @@
     .banner {
       position: sticky; top: 0; z-index: 100;
       background: var(--navy); color: var(--white);
-      padding: 14px 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      padding: 0 28px; min-height: 50px;
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
     }
-    .banner h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; }
+    .banner h1 {
+      font-size: 1.02rem; font-weight: 800; letter-spacing: 0.02em;
+      display: flex; align-items: center; gap: 9px; margin-right: auto;
+    }
+    .banner h1::before { content: '\25C6'; color: var(--blue); font-size: 0.82em; }
     .privacy-notice {
-      background: rgba(194,65,12,0.18); border: 1px solid rgba(194,65,12,0.4);
-      color: #fddfc4; padding: 4px 14px; border-radius: 20px;
-      font-size: 0.75rem; margin-left: auto;
+      background: rgba(194,65,12,0.16); border: 1px solid rgba(194,65,12,0.4);
+      color: #fddfc4; padding: 5px 13px; border-radius: 20px;
+      font-size: 0.74rem; white-space: nowrap;
     }
 
     /* ── 實際尺寸預覽 ── */
@@ -44,7 +50,7 @@
       margin-bottom: 4px;
     }
     .actual-size-btn {
-      padding: 5px 13px; border-radius: 16px;
+      padding: 5px 13px; border-radius: 16px; white-space: nowrap;
       border: 1.5px solid var(--light); background: transparent;
       font-family: var(--font); font-size: 0.75rem; color: var(--mid);
       cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px;
@@ -162,63 +168,82 @@
     .onboard-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 
     /* ── 字型大小切換 ── */
-    .font-size-ctrl { display: flex; align-items: center; gap: 4px; margin-left: 12px; }
+    .font-size-ctrl { display: flex; align-items: center; gap: 5px; }
     .font-size-ctrl span { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-right: 2px; }
     .fs-btn {
-      padding: 3px 10px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.25);
+      height: 30px; min-width: 34px; padding: 0 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 14px; border: 1px solid rgba(255,255,255,0.25);
       background: transparent; color: rgba(255,255,255,0.7);
-      font-family: var(--font); font-size: 0.78rem; font-weight: 600; cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      font-family: var(--font); font-weight: 700; line-height: 1; cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
+    .fs-btn[data-fs="S"] { font-size: 0.72rem; }
+    .fs-btn[data-fs="M"] { font-size: 0.95rem; }
+    .fs-btn[data-fs="L"] { font-size: 1.22rem; }
     .fs-btn:hover   { background: rgba(255,255,255,0.12); color: #fff; }
     .fs-btn.active  { background: var(--blue); border-color: var(--blue); color: #fff; }
 
-    /* ── Tab Bar（sticky）── */
+    /* ── Tab Bar：產品選擇器（segmented）── */
     .tab-bar {
       position: sticky; top: 50px; z-index: 99;
-      background: var(--white); border-bottom: 2px solid var(--blue-lt);
-      display: flex; padding: 0 28px; gap: 4px;
+      background: var(--bg); border-bottom: 1px solid var(--blue-lt);
+      display: flex; padding: 13px 26px; gap: 10px;
     }
     .tab-btn {
-      padding: 12px 22px; min-height: 44px; border: none; background: transparent;
-      font-family: var(--font); font-size: 0.88rem; font-weight: 600;
-      color: var(--mid); cursor: pointer; border-bottom: 3px solid transparent;
-      margin-bottom: -2px; transition: color 0.2s, border-color 0.2s;
+      flex: 1; display: flex; align-items: center; gap: 11px; text-align: left;
+      padding: 11px 16px; min-height: 54px; border: 1.5px solid #EADFD2; border-radius: 12px;
+      background: var(--white); font-family: var(--font); font-size: 0.9rem; font-weight: 700;
+      color: var(--mid); cursor: pointer; transition: border-color .15s, color .15s, box-shadow .15s;
     }
-    .tab-btn.active   { color: var(--navy); border-bottom-color: var(--navy); }
-    .tab-btn:hover:not(.active) { color: var(--navy); }
-    .tab-btn:focus-visible {
-      outline: 3px solid var(--blue); outline-offset: -3px; border-radius: 4px;
-    }
+    .tab-btn .tab-num { font-family: ui-monospace, 'SF Mono', monospace; font-size: 1.15rem; font-weight: 800; color: #d6cfc7; flex-shrink: 0; transition: color .15s; }
+    .tab-btn .tab-name { line-height: 1.2; }
+    .tab-btn:hover:not(.active) { border-color: #d6cfc7; color: var(--navy); }
+    .tab-btn.active { color: var(--navy); border-color: var(--blue); box-shadow: 0 0 0 1.5px var(--blue) inset; }
+    .tab-btn.active .tab-num { color: var(--blue); }
+    .tab-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 
     /* ── 雙欄主體 ── */
     .main {
-      display: grid; grid-template-columns: 420px 1fr;
+      display: grid; grid-template-columns: 520px minmax(0, 1fr);
       align-items: start;
     }
     .main[hidden] { display: none; }
 
     /* ── 左欄：表單（自身捲動）── */
     .form-panel {
-      background: var(--white); border-right: 1px solid var(--light);
-      padding: 22px 26px; overflow-y: auto;
-      max-height: calc(100vh - 98px);
+      grid-column: 2; grid-row: 1; background: #FFFCF9; border: none;
+      padding: 26px clamp(24px, 5vw, 88px); overflow-y: auto;
+      max-height: calc(100vh - var(--stick));
+      counter-reset: formsec;
     }
 
     /* #2 修正：改用 :first-child，語意更精確 */
     .section-title {
-      font-size: 0.95rem; font-weight: 700; color: var(--navy);
-      border-left: 3px solid var(--blue); padding-left: 9px;
-      margin: 28px 0 12px;
+      counter-increment: formsec;
+      font-size: 1rem; font-weight: 800; color: var(--navy);
+      letter-spacing: 0.01em; display: flex; align-items: center; gap: 11px;
+      margin: 28px 0 16px; padding-top: 24px; border-top: 1px solid var(--light);
     }
-    .section-title:first-child { margin-top: 0; }
+    .section-title::before {
+      content: counter(formsec, decimal-leading-zero);
+      width: 27px; height: 27px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--blue); color: #fff;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 0.78rem; font-weight: 800; border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(194,65,12,0.28);
+    }
+    .section-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
 
-    .field { margin-bottom: 11px; }
+    .field { margin-bottom: 14px; }
     /* #7 字型放大 */
     .field label {
-      display: block; font-size: 0.75rem; font-weight: 500;
-      color: var(--mid); margin-bottom: 4px;
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: #44403c; margin-bottom: 6px; letter-spacing: 0.01em;
+      transition: color 0.15s;
     }
+    .field:focus-within > label { color: var(--blue); }
     /* #6 helper text 取代 tooltip */
     .field-hint {
       font-size: 0.72rem; color: var(--mid); margin: -2px 0 6px; line-height: 1.45;
@@ -228,11 +253,13 @@
     }
     .field-warn.visible { display: block; }
     .field input, .field select, .field textarea {
-      width: 100%; padding: 10px 10px; min-height: 44px;
-      border: 1.5px solid var(--light); border-radius: 6px;
-      font-family: var(--font); font-size: 0.86rem; color: var(--text);
-      background: #fffaf7; transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%; padding: 11px 12px; min-height: 44px;
+      border: 1.5px solid var(--light); border-radius: 8px;
+      font-family: var(--font); font-size: 0.88rem; color: var(--text);
+      background: #fff; transition: border-color 0.18s, box-shadow 0.18s;
     }
+    .field input::placeholder, .field textarea::placeholder { color: #bdb6ae; }
+    .field input:hover, .field select:hover, .field textarea:hover { border-color: #c9c1b8; }
     .field input:focus, .field select:focus, .field textarea:focus {
       outline: none; border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(194,65,12,0.14);
@@ -240,8 +267,11 @@
     .field textarea { resize: vertical; min-height: 48px; }
     .field-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     .field-row3 { display: grid; grid-template-columns: 2fr 1.4fr 2fr; gap: 5px; }
-    .med-entry + .med-entry,
-    .meal-entry + .meal-entry { border-top: 1px solid var(--light); padding-top: 10px; margin-top: 4px; }
+    .med-entry, .meal-entry {
+      background: #FBF6EF; border: 1px solid #EADFD2; border-radius: 10px;
+      padding: 14px; margin-bottom: 10px;
+    }
+    .med-entry > *:last-child, .meal-entry > *:last-child { margin-bottom: 0; }
     .condition-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
     .cond-tag {
       padding: 3px 10px; border: 1px solid var(--light); border-radius: 20px;
@@ -258,9 +288,9 @@
     }
     .remove-entry-btn:hover { color: #dc2626; background: #fee2e2; }
     .add-entry-btn {
-      display: block; width: 100%; margin-top: 10px; padding: 7px;
-      background: none; border: 1.5px dashed var(--light); border-radius: 6px;
-      color: var(--mid); font-size: 12px; cursor: pointer; text-align: center;
+      display: block; width: 100%; margin-top: 2px; padding: 10px;
+      background: #fff; border: 1.5px dashed #d6cfc7; border-radius: 8px;
+      color: var(--mid); font-size: 12.5px; font-weight: 600; cursor: pointer; text-align: center;
       font-family: var(--font); transition: border-color .15s, color .15s, background .15s;
     }
     .add-entry-btn:hover { border-color: var(--blue); color: var(--blue); background: #fff7ed; }
@@ -303,26 +333,30 @@
     /* ── 右欄：預覽（sticky，跟隨頁面捲動）── */
     /* #5 修正：改為 sticky，消除雙捲軸問題 */
     .preview-panel {
-      background: var(--bg); padding: 24px 28px;
-      display: flex; flex-direction: row; flex-wrap: wrap;
-      gap: 28px; align-items: flex-start; align-content: flex-start;
-      position: sticky; top: 98px;
-      max-height: calc(100vh - 98px); overflow-y: auto;
+      grid-column: 1; grid-row: 1; background: var(--navy); color: #fff;
+      padding: 28px 26px 32px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      position: sticky; top: var(--stick);
+      max-height: calc(100vh - var(--stick)); overflow-y: auto;
     }
-    .preview-block { display: flex; flex-direction: column; }
-    .preview-label {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
-      color: var(--mid); margin-bottom: 8px; text-transform: uppercase;
-    }
-    .size-hint { margin-top: 10px; }
-    .size-comp { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 5px; }
-    .size-comp-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .size-comp-rect { border-radius: 2px; }
-    .size-comp-rect.this-card { background: var(--blue-lt); border: 1.5px solid var(--blue); }
-    .size-comp-rect.ref-card  { background: var(--light); border: 1.5px solid #a8a29e; }
-    .size-comp-label { font-size: 0.62rem; color: var(--mid); white-space: nowrap; }
-    .size-comp-sep { font-size: 0.8rem; color: var(--light); padding-bottom: 14px; }
-    .size-tag { margin-top: 5px; font-size: 0.72rem; color: var(--mid); }
+    .hero-head { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .hero-title { font-size: 0.84rem; font-weight: 800; color: #fff; display: flex; flex-direction: column; gap: 2px; }
+    .hero-title span { font-size: 0.7rem; font-weight: 500; color: #a8a29e; letter-spacing: .02em; }
+    .flip-toggle { display: flex; gap: 3px; background: #26211d; border: 1px solid #3a332e; border-radius: 22px; padding: 3px; flex-shrink: 0; }
+    .flip-btn { border: none; background: transparent; color: #d6d3d1; font-family: var(--font); font-size: 0.78rem; font-weight: 700; padding: 7px 17px; border-radius: 18px; cursor: pointer; min-height: 36px; transition: background .15s, color .15s; }
+    .flip-btn:hover:not(.active) { color: #fff; }
+    .flip-btn.active { background: #FB923C; color: #1C1917; }
+    .hero-frame { position: relative; padding: 16px; border: 1.5px solid #FB923C; border-radius: 14px; background: #26211d; margin: 8px 0 2px; flex-shrink: 0; }
+    .hero-num { position: absolute; top: -16px; left: -16px; z-index: 3; width: 38px; height: 38px; background: #FB923C; color: #1C1917; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-family: ui-monospace, monospace; font-weight: 800; font-size: 1rem; box-shadow: 0 6px 16px rgba(0,0,0,.4); }
+    .hero-card.face-back { display: none; }
+    body[data-face="back"] .hero-card.face-front { display: none; }
+    body[data-face="back"] .hero-card.face-back  { display: block; }
+    .hero-meta { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 6px; }
+    .hero-meta .size-tag { font-size: 0.74rem; color: #a8a29e; text-align: center; }
+    .preview-panel .actual-size-btn { border-color: #4a423c; color: #d6d3d1; background: transparent; }
+    .preview-panel .actual-size-btn:hover { border-color: #FB923C; color: #FB923C; }
+    .preview-panel .actual-size-btn.active { background: #FB923C; border-color: #FB923C; color: #1C1917; }
+    .preview-panel .actual-size-notice { background: #26211d; border-color: #3a332e; color: #fde8d4; }
 
     /* ── 卡片縮放容器 ── */
     .h-wrapper {
@@ -453,7 +487,7 @@
     .card-med-row { display: flex; gap: 2mm; overflow: hidden; font-size: 7pt; line-height: 1.35; }
     .card-med-col { flex: 1; display: flex; flex-direction: column; gap: 0.5mm; overflow: hidden; min-width: 0; }
 
-    /* ── 寵物卡：手冊提示 ── */
+    /* ── 動物夥伴卡：手冊提示 ── */
     .pet-handbook-tip {
       display: flex; align-items: flex-start; gap: 10px;
       background: var(--blue-lt); border: 1px solid rgba(194,65,12,0.25);
@@ -465,7 +499,7 @@
     }
     .pet-handbook-tip a:hover { text-decoration: underline; }
 
-    /* 寵物卡 body */
+    /* 動物夥伴卡 body */
     .pet-body {
       flex: 1; padding: 2.5mm 3mm;
       display: flex; flex-direction: column; justify-content: flex-start; gap: 3mm; overflow: hidden;
@@ -499,22 +533,112 @@
     .pet-top-row    { display: flex; gap: 2mm; }
     .pet-top-fields { flex: 1; display: flex; flex-direction: column; gap: 0.8mm; }
 
+    /* ── 行動版：預覽卡片浮動鈕 + 底部抽屜 ── */
+    .preview-fab { display: none; }       /* 桌機隱藏 */
+    .preview-backdrop { display: none; }
+    .sheet-header { display: none; }      /* 桌機隱藏 */
+    .sheet-footer { display: none; }      /* 桌機隱藏 */
+
     /* ── #1 行動版斷點 ── */
-    @media (max-width: 768px) {
-      .banner { padding: 10px 16px; top: 0; gap: 10px; }
+    @media (max-width: 1000px) {
+      .banner { padding: 8px 16px; min-height: 46px; gap: 10px; }
+      .banner h1 { font-size: 0.96rem; }
+      .banner-desc { display: none; }     /* 手機僅留 SafeCard */
       .privacy-notice { display: none; }
       .font-size-ctrl { margin-left: auto; }
-      .preview-ctrl, .actual-size-notice { display: none !important; }
-      .fs-btn { padding: 8px 16px; min-height: 44px; font-size: 0.9rem; border-radius: 8px; }
-      .tab-bar { padding: 0 16px; top: 44px; }
-      .tab-btn { padding: 10px 12px; min-height: 44px; font-size: 0.8rem; white-space: nowrap; }
+      .actual-size-btn, .actual-size-notice { display: none !important; }
+      .fs-btn { height: 44px; min-width: 44px; padding: 0 14px; border-radius: 10px; }
+      .fs-btn[data-fs="S"] { font-size: 0.82rem; }
+      .fs-btn[data-fs="M"] { font-size: 1.05rem; }
+      .fs-btn[data-fs="L"] { font-size: 1.32rem; }
+      .tab-bar { padding: 10px 12px; top: 46px; overflow-x: auto; gap: 8px; }
+      .tab-btn { flex: 0 0 auto; padding: 9px 14px; min-height: 46px; font-size: 0.82rem; white-space: nowrap; }
       .main { grid-template-columns: 1fr; }
-      .form-panel { max-height: none; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--light); }
-      .preview-panel {
-        position: static; max-height: none; overflow-y: visible;
-        padding: 20px 16px; flex-direction: column;
-        --hs: 1.0; --ps: 1.2; --ms: 1.2;
+      .form-panel {
+        grid-column: 1 / -1;
+        max-height: none; overflow-y: visible; border-right: none;
+        border-bottom: none; padding: 18px 18px 96px;
       }
+
+      /* 浮動「預覽卡片」鈕 */
+      .preview-fab {
+        display: flex; align-items: center; gap: 8px;
+        position: fixed; right: 16px; bottom: 16px; z-index: 8000;
+        background: var(--navy); color: #fff; border: none;
+        padding: 14px 22px; border-radius: 30px;
+        font-family: var(--font); font-size: 0.92rem; font-weight: 700;
+        box-shadow: 0 8px 26px rgba(28,25,23,0.4); cursor: pointer; min-height: 50px;
+      }
+      .preview-fab .fab-ico {
+        width: 9px; height: 9px; border-radius: 50%; background: var(--blue);
+        box-shadow: 0 0 0 3px rgba(194,65,12,0.3);
+      }
+      body.sheet-open .preview-fab { display: none; }
+
+      /* 半透明遮罩 */
+      .preview-backdrop {
+        display: block; position: fixed; inset: 0; z-index: 8400;
+        background: rgba(28,25,23,0.55); opacity: 0; pointer-events: none;
+        transition: opacity .28s ease;
+      }
+      body.sheet-open .preview-backdrop { opacity: 1; pointer-events: auto; }
+      body.sheet-open { overflow: hidden; }
+
+      /* 預覽抽屜 */
+      .preview-panel {
+        position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+        max-height: 90vh; overflow-y: auto; z-index: 8450;
+        margin: 0; padding: 0 16px 28px;
+        border-top-left-radius: 20px; border-top-right-radius: 20px;
+        box-shadow: 0 -12px 44px rgba(0,0,0,0.34);
+        flex-direction: column; align-items: center;
+        transform: translateY(101%); transition: transform .3s ease;
+        --hs: 0.82; --ps: 0.96; --ms: 0.96;
+      }
+      body.sheet-open .preview-panel { transform: translateY(0); }
+      .sheet-header {
+        display: flex; align-items: center; justify-content: space-between;
+        position: sticky; top: 0; z-index: 2; width: 100%;
+        background: var(--navy); padding: 12px 2px 12px; margin-bottom: 4px;
+      }
+      .sheet-grab {
+        position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
+        width: 38px; height: 4px; border-radius: 2px; background: #4a423c;
+      }
+      .sheet-title { font-size: 0.92rem; font-weight: 800; color: #fff; }
+      .sheet-close {
+        background: none; border: 1.5px solid #4a423c; border-radius: 18px;
+        padding: 7px 15px; font-family: var(--font); font-size: 0.82rem; font-weight: 600;
+        color: #d6d3d1; cursor: pointer; min-height: 38px;
+      }
+      .sheet-close:hover { border-color: #FB923C; color: #FB923C; }
+
+      /* 抽屜底部固定列印鈕 */
+      .sheet-footer {
+        display: flex; flex-direction: column; align-items: stretch;
+        position: sticky; bottom: 0; z-index: 2; width: 100%;
+        background: var(--navy); margin-top: 10px;
+        padding: 12px 2px calc(14px + env(safe-area-inset-bottom));
+        border-top: 1px solid #3a332e;
+      }
+      .sheet-print-btn {
+        flex: 1; padding: 14px; border-radius: 10px;
+        background: #FB923C; color: #1C1917; border: none;
+        font-family: var(--font); font-size: 0.98rem; font-weight: 800;
+        cursor: pointer; min-height: 50px;
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+      }
+      .sheet-print-btn:active { background: #f97316; }
+      .sheet-print-hint {
+        width: 100%; text-align: center; font-size: 0.72rem; color: #a8a29e;
+        margin-top: 8px; line-height: 1.5;
+      }
+
+      /* Hero 在手機抽屜中的調整 */
+      .hero-title { display: none; }
+      .hero-head { justify-content: center; padding-top: 2px; }
+      .hero-frame { padding: 12px; margin: 4px 0 2px; }
+      .hero-num { width: 32px; height: 32px; top: -13px; left: -13px; font-size: 0.85rem; }
     }
 
     /* #7 reduced-motion */
@@ -569,15 +693,223 @@
 
     .print-human, .print-pet, .print-med { display: none; }
     .cut-hint { display: none; }
+
+    /* ── just-in-time 使用提示 ── */
+    .jit-hint {
+      display: none; align-items: center; gap: 14px;
+      background: var(--blue-lt); border-bottom: 1px solid rgba(194,65,12,0.3);
+      padding: 11px 28px; font-size: 0.84rem; color: #7c2d12; line-height: 1.55;
+    }
+    .jit-hint.show { display: flex; }
+    .jit-ico { font-size: 1rem; flex-shrink: 0; }
+    .jit-text b { color: var(--blue); font-weight: 800; }
+    .jit-close {
+      margin-left: auto; background: none; border: 1.5px solid rgba(194,65,12,0.45);
+      border-radius: 16px; padding: 5px 14px; color: var(--blue); font-weight: 700;
+      cursor: pointer; font-size: 0.78rem; white-space: nowrap; font-family: var(--font);
+      transition: background .15s; flex-shrink: 0;
+    }
+    .jit-close:hover { background: rgba(194,65,12,0.12); }
+    @media (max-width: 1000px) {
+      .jit-hint { padding: 10px 16px; gap: 10px; align-items: flex-start; font-size: 0.8rem; }
+      .jit-close { padding: 7px 12px; min-height: 36px; }
+    }
+
+    /* ════════ 全頁封面（強烈警示型）════════ */
+    .cover {
+      position: fixed; inset: 0; z-index: 9500;
+      background: var(--navy); color: var(--bg);
+      overflow-y: auto; display: flex; flex-direction: column;
+      font-family: var(--font);
+    }
+    .cover.hidden { display: none !important; }
+    .cover-hazard {
+      height: 11px; flex-shrink: 0;
+      background: repeating-linear-gradient(135deg, #C2410C 0 16px, #1C1917 16px 32px);
+    }
+    .cover-inner {
+      flex: 1; width: 100%; max-width: 1180px; margin: 0 auto;
+      padding: 30px 48px 30px; display: flex; flex-direction: column; gap: 26px;
+    }
+    .cover-head { display: flex; justify-content: space-between; align-items: center; }
+    .cover-logo { font-size: 1.15rem; font-weight: 900; color: #fff; letter-spacing: 0.02em; }
+    .cover-logo .dot { color: #FB923C; }
+    .cover-meta { font-size: 0.78rem; color: #a8a29e; letter-spacing: 0.04em; }
+    .cover-hero { margin-top: 4px; }
+    .cover-headline {
+      font-size: clamp(2rem, 4.6vw, 3.1rem); font-weight: 900; line-height: 1.12;
+      letter-spacing: 0.01em; color: #fff;
+    }
+    .cover-headline .em { color: #FB923C; }
+    .cover-deck {
+      font-size: clamp(0.95rem, 1.5vw, 1.08rem); color: #d6d3d1; line-height: 1.65;
+      margin-top: 16px; max-width: 640px;
+    }
+    .cover-deck b { color: #fff; font-weight: 700; }
+    .cover-steps {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 20px;
+    }
+    .cover-steps span { font-size: 0.82rem; color: #a8a29e; display: flex; align-items: center; gap: 8px; }
+    .cover-steps span.sep { color: #5a5048; }
+    .cover-steps b {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 21px; height: 21px; border-radius: 50%;
+      background: rgba(251,146,60,0.16); color: #FB923C; font-size: 0.72rem; font-weight: 800;
+    }
+    @media (max-width: 1000px) { .cover-steps span.sep { display: none; } }
+    .cover-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .cover-card {
+      background: #26211d; border: 1px solid #3a332e; border-radius: 14px;
+      padding: 22px 20px; position: relative; cursor: pointer;
+      transition: all .18s ease; text-align: left; color: inherit; font-family: inherit;
+    }
+    .cover-card:hover { border-color: #5a5048; transform: translateY(-3px); }
+    .cover-card.rec { border-color: #FB923C; box-shadow: 0 0 0 1.5px #FB923C inset, 0 12px 34px rgba(194,65,12,0.22); }
+    .cover-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .cover-num { font-family: ui-monospace, monospace; font-size: 1.9rem; font-weight: 800; color: #FB923C; line-height: 1; }
+    .cover-card-icon { opacity: 0.85; }
+    .cover-card-name { font-size: 1.05rem; font-weight: 800; color: #fff; }
+    .cover-card-size { font-family: ui-monospace, monospace; font-size: 0.7rem; color: #a8a29e; margin-top: 5px; }
+    .cover-card-who { font-size: 0.84rem; font-weight: 700; color: var(--blue-lt); margin-top: 12px; }
+    .cover-card-fields { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; }
+    .cover-card-fields span { font-size: 0.78rem; color: #c9c2ba; padding-left: 14px; position: relative; }
+    .cover-card-fields span::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 1px; background: #FB923C; }
+    .cover-card-go { margin-top: 14px; font-size: 0.8rem; font-weight: 800; color: #FB923C; display: flex; align-items: center; gap: 5px; opacity: 0; transition: opacity .15s; }
+    .cover-card:hover .cover-card-go { opacity: 1; }
+    .cover-rec-tag { position: absolute; top: -9px; right: 16px; background: #FB923C; color: #1C1917; font-size: 0.68rem; font-weight: 800; padding: 3px 10px; border-radius: 12px; }
+    .cover-guide {
+      background: #26211d; border: 1px solid #3a332e; border-radius: 14px;
+      padding: 20px 22px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .cover-guide-q { font-size: 1rem; font-weight: 800; color: #fff; white-space: nowrap; }
+    .cover-guide-q span { font-size: 0.74rem; font-weight: 600; color: #a8a29e; margin-left: 8px; }
+    .cover-guide-choices { display: flex; gap: 10px; flex: 1; flex-wrap: wrap; }
+    .cover-gc {
+      background: transparent; border: 1.5px solid #4a423c; color: #d6d3d1;
+      border-radius: 22px; padding: 11px 18px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all .15s; font-family: inherit; min-height: 44px;
+    }
+    .cover-gc:hover { border-color: #FB923C; color: #fff; }
+    .cover-gc.on { background: #FB923C; border-color: #FB923C; color: #1C1917; font-weight: 800; }
+    .cover-cta {
+      background: #FB923C; color: #1C1917; border: none; border-radius: 10px;
+      padding: 14px 26px; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+      white-space: nowrap; transition: all .15s; font-family: inherit; min-height: 44px;
+    }
+    .cover-cta:disabled { background: #4a423c; color: #a8a29e; cursor: not-allowed; }
+    .cover-cta:not(:disabled):hover { background: #fdae6b; }
+    .cover-foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      flex-wrap: wrap; margin-top: auto; padding-top: 16px; border-top: 1px solid #3a332e;
+      font-size: 0.74rem; color: #a8a29e;
+    }
+    .cover-skip {
+      background: none; border: none; color: #FB923C; font-weight: 700;
+      font-size: 0.84rem; cursor: pointer; font-family: inherit; white-space: nowrap;
+    }
+    .cover-skip:hover { text-decoration: underline; }
+    @media (max-width: 1000px) {
+      .cover-inner { padding: 24px 18px 28px; gap: 20px; }
+      .cover-cards { grid-template-columns: 1fr; gap: 12px; }
+      .cover-card-go { opacity: 1; }
+      .cover-guide { flex-direction: column; align-items: stretch; gap: 14px; }
+      .cover-guide-q { white-space: normal; }
+      .cover-cta { width: 100%; }
+      .cover-meta { display: none; }
+    }
   </style>
 </head>
 <body data-tab="human">
+
+<!-- ════════════ 全頁封面（強烈警示型）════════════ -->
+<div class="cover no-print" id="cover" role="region" aria-label="SafeCard 介紹">
+  <div class="cover-hazard"></div>
+  <div class="cover-inner">
+
+    <header class="cover-head">
+      <span class="cover-logo"><span class="dot">◆</span> SafeCard</span>
+      <span class="cover-meta">適用任何災害 · 隨身攜帶</span>
+    </header>
+
+    <div class="cover-hero">
+      <h1 class="cover-headline">災難來得突然，<br><span class="em">重要資訊不能臨時找。</span></h1>
+      <p class="cover-deck">地震、颱風、火災或任何意外都適用。當你走散、受傷說不出話，或得緊急託付動物夥伴，這張隨身小卡會替你回答：<b>你是誰、該聯絡誰、有哪些過敏與病史</b>——讓救援者與親友第一時間就能接手。</p>
+      <div class="cover-steps" aria-label="使用流程">
+        <span><b>1</b> 填好資料</span>
+        <span class="sep">→</span>
+        <span><b>2</b> 即時預覽卡片</span>
+        <span class="sep">→</span>
+        <span><b>3</b> 列印護貝、放進避難包</span>
+      </div>
+    </div>
+
+    <div class="cover-cards" id="cover-cards">
+      <button class="cover-card" data-card="human" onclick="enterCard('human')">
+        <div class="cover-card-top">
+          <span class="cover-num">01</span>
+          <span class="cover-card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#FFF7ED"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></span>
+        </div>
+        <h3 class="cover-card-name">避難聯絡卡</h3>
+        <div class="cover-card-size">名片 90 × 54 mm · 核心卡</div>
+        <p class="cover-card-who">給每個人都該有的一張</p>
+        <div class="cover-card-fields">
+          <span>姓名 · 血型 · 生日</span><span>身分證字號</span><span>緊急聯絡人 ×2</span><span>避難地點 ×2</span>
+        </div>
+        <span class="cover-card-go">開始製作 →</span>
+      </button>
+
+      <button class="cover-card" data-card="med" onclick="enterCard('med')">
+        <div class="cover-card-top">
+          <span class="cover-num">02</span>
+          <span class="cover-card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#FFF7ED"><rect x="9.5" y="3" width="5" height="18" rx="1.2"/><rect x="3" y="9.5" width="18" height="5" rx="1.2"/></svg></span>
+        </div>
+        <h3 class="cover-card-name">醫療資訊卡</h3>
+        <div class="cover-card-size">名片 90 × 54 mm · 補強卡</div>
+        <p class="cover-card-who">給有慢性病、過敏的人</p>
+        <div class="cover-card-fields">
+          <span>藥物 · 食物過敏</span><span>慢性病 / 醫療狀況</span><span>目前用藥</span><span>健保卡號</span>
+        </div>
+        <span class="cover-card-go">開始製作 →</span>
+      </button>
+
+      <button class="cover-card" data-card="pet" onclick="enterCard('pet')">
+        <div class="cover-card-top">
+          <span class="cover-num">03</span>
+          <span class="cover-card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#FFF7ED"><circle cx="7" cy="8.5" r="2.4"/><circle cx="12" cy="6.5" r="2.4"/><circle cx="17" cy="8.5" r="2.4"/><circle cx="12" cy="16" r="4.6"/></svg></span>
+        </div>
+        <h3 class="cover-card-name">動物夥伴卡</h3>
+        <div class="cover-card-size">A7 74 × 105 mm · 專用卡</div>
+        <p class="cover-card-who">給有貓狗等動物夥伴的家庭</p>
+        <div class="cover-card-fields">
+          <span>品種 · 外觀 · 晶片</span><span>用藥狀況</span><span>照顧者聯絡</span><span>飲食 · 就診診所</span>
+        </div>
+        <span class="cover-card-go">開始製作 →</span>
+      </button>
+    </div>
+
+    <section class="cover-guide">
+      <div class="cover-guide-q">你要幫誰準備？<span>可複選</span></div>
+      <div class="cover-guide-choices" id="cover-choices">
+        <button class="cover-gc" data-aud="self" onclick="toggleAud(this)">我自己或家人</button>
+        <button class="cover-gc" data-aud="medical" onclick="toggleAud(this)">有慢性病、過敏或長輩</button>
+        <button class="cover-gc" data-aud="pet" onclick="toggleAud(this)">有貓狗等動物夥伴</button>
+      </div>
+      <button class="cover-cta" id="cover-cta" disabled onclick="enterRecommended()">請先選擇對象</button>
+    </section>
+
+    <footer class="cover-foot">
+      <span>🔒 不蒐集 · 不上傳 · 不儲存　|　資料只存在你的瀏覽器，關閉即消失</span>
+      <button class="cover-skip" onclick="enterCard('human')">略過，直接開始填寫 →</button>
+    </footer>
+  </div>
+</div>
+
 
 <!-- ── 實際尺寸校正 Modal ── -->
 <div class="calib-overlay hidden no-print" id="calib-overlay" role="dialog" aria-modal="true" aria-labelledby="calib-title">
   <div class="calib-box">
     <div class="calib-title" id="calib-title">📏 實際尺寸校正</div>
-    <div class="calib-sub">校正後，預覽卡片的大小將接近實際印刷尺寸，讓您確認文字是否清晰易讀。</div>
+    <div class="calib-sub">校正後，預覽卡片的大小將接近實際印刷尺寸，讓你確認文字是否清晰易讀。</div>
     <div class="calib-card-wrap">
       <div class="calib-card-ref">
         <span style="font-size:1.6rem;">💳</span>
@@ -586,7 +918,7 @@
       </div>
     </div>
     <div class="calib-hint">
-      請拿出您的悠遊卡或任何信用卡，貼在螢幕上對準虛線框。<br>
+      請拿出你的悠遊卡或任何信用卡，貼在螢幕上對準虛線框。<br>
       若大小不一致，請按 <kbd>Ctrl</kbd> <kbd>+</kbd> / <kbd>Ctrl</kbd> <kbd>-</kbd>（Mac：<kbd>⌘ +</kbd> / <kbd>⌘ -</kbd>）調整瀏覽器縮放比例，直到框框與卡片大小吻合，再點下方按鈕。
     </div>
     <div class="calib-actions">
@@ -613,7 +945,7 @@
         <div class="onboard-step-num">2</div>
         <div class="onboard-step-text">
           <strong>即時預覽卡片內容</strong>
-          <span>右側即時顯示卡片外觀，可切換「避難聯絡卡」、「醫療資訊卡」、「寵物資料卡」三種類型。</span>
+          <span>右側即時顯示卡片外觀，可切換「避難聯絡卡」、「醫療資訊卡」、「動物夥伴卡」三種類型。</span>
         </div>
       </div>
       <div class="onboard-step">
@@ -625,7 +957,7 @@
       </div>
     </div>
     <div class="onboard-privacy">
-      🔒&nbsp;<span>本工具<strong>不傳送任何資料至伺服器</strong>，所有資訊僅存在於您的瀏覽器記憶體中，關閉頁面即消失。</span>
+      🔒&nbsp;<span>本工具<strong>不會上傳任何資料</strong>，所有內容只暫存在你的瀏覽器，關閉頁面即消失。</span>
     </div>
     <button class="onboard-btn" id="onboard-start" onclick="dismissOnboard()">開始填寫</button>
     <p style="margin-top:16px;text-align:center;font-size:0.72rem;color:var(--mid);line-height:1.6;">
@@ -638,14 +970,14 @@
 
 <!-- ── Banner ── -->
 <header class="banner no-print">
-  <h1>SafeCard 防災避難聯絡卡</h1>
+  <h1 onclick="showCover()" style="cursor:pointer" title="回到封面">SafeCard<span class="banner-desc"> 防災避難聯絡卡</span></h1>
   <div class="font-size-ctrl no-print">
     <span>字級</span>
     <button class="fs-btn" data-fs="S" onclick="setFontSize('S')">小</button>
     <button class="fs-btn" data-fs="M" onclick="setFontSize('M')">中</button>
     <button class="fs-btn" data-fs="L" onclick="setFontSize('L')">大</button>
   </div>
-  <div class="privacy-notice">🔒 本工具不儲存任何資料，所有資訊僅存在於瀏覽器記憶體中</div>
+  <div class="privacy-notice">🔒 不儲存資料 · 關閉即消失</div>
 </header>
 
 <!-- ── Tab Bar：#3 加入完整 ARIA tab pattern ── -->
@@ -653,16 +985,23 @@
   <button class="tab-btn active"
     role="tab" aria-selected="true"
     aria-controls="tab-human" id="tab-btn-human"
-    onclick="switchTab('human')">避難聯絡卡</button>
+    onclick="switchTab('human')"><span class="tab-num">01</span><span class="tab-name">避難聯絡卡</span></button>
   <button class="tab-btn"
     role="tab" aria-selected="false"
     aria-controls="tab-med" id="tab-btn-med"
-    onclick="switchTab('med')">醫療資訊卡</button>
+    onclick="switchTab('med')"><span class="tab-num">02</span><span class="tab-name">醫療資訊卡</span></button>
   <button class="tab-btn"
     role="tab" aria-selected="false"
     aria-controls="tab-pet" id="tab-btn-pet"
-    onclick="switchTab('pet')">寵物個資與健康資料卡</button>
+    onclick="switchTab('pet')"><span class="tab-num">03</span><span class="tab-name">動物夥伴卡</span></button>
 </nav>
+
+<!-- ── 進入填寫頁的 just-in-time 提示（首次顯示一次）── -->
+<div class="jit-hint no-print" id="jit-hint" role="status">
+  <span class="jit-ico">💡</span>
+  <span class="jit-text">填寫方式很簡單：<b>填好資料</b>　→　<b>卡片即時成形</b>　→　拉到最下方按 <b>「🖨️ 列印」</b>，沿邊剪下護貝，就能放進避難包。</span>
+  <button class="jit-close" onclick="dismissJitHint()">知道了</button>
+</div>
 
 <!-- ════════════ 緊急聯絡小卡 Tab ════════════ -->
 <div class="main no-print" id="tab-human" role="tabpanel" aria-labelledby="tab-btn-human">
@@ -759,37 +1098,28 @@
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
-    <div class="preview-ctrl no-print">
+    <div class="hero-head no-print">
+      <div class="hero-title">即時預覽<span>避難聯絡卡 · 90 × 54 mm</span></div>
+      <div class="flip-toggle" role="group" aria-label="切換正反面">
+        <button type="button" class="flip-btn active" data-face="front" onclick="setFace('front')">正面</button>
+        <button type="button" class="flip-btn" data-face="back" onclick="setFace('back')">背面</button>
+      </div>
+    </div>
+    <div class="hero-frame">
+      <span class="hero-num">01</span>
+      <div class="hero-card face-front">
+        <div class="h-wrapper"><div class="emergency-card" id="preview-front" aria-hidden="true"></div></div>
+      </div>
+      <div class="hero-card face-back">
+        <div class="h-wrapper"><div class="emergency-card" id="preview-back" aria-hidden="true"></div></div>
+      </div>
+    </div>
+    <div class="hero-meta no-print">
+      <div class="size-tag">📐 90 × 54 mm · 與悠遊卡相同大小</div>
       <button class="actual-size-btn" id="actual-size-btn-human" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
-    </div>
-    <div class="actual-size-notice no-print" id="actual-size-notice-human">
-      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
-      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">卡片正面預覽</div>
-      <div class="h-wrapper">
-        <div class="emergency-card" id="preview-front" aria-hidden="true"></div>
-      </div>
-      <div class="size-hint">
-        <div class="size-comp">
-          <div class="size-comp-item">
-            <div class="size-comp-rect this-card" style="width:34px;height:21px;"></div>
-            <span class="size-comp-label">本卡</span>
-          </div>
-          <span class="size-comp-sep">|</span>
-          <div class="size-comp-item">
-            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
-            <span class="size-comp-label">悠遊卡</span>
-          </div>
-        </div>
-        <div class="size-tag">📐 90 × 54 mm · 與悠遊卡相同大小</div>
-      </div>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">卡片背面預覽</div>
-      <div class="h-wrapper">
-        <div class="emergency-card" id="preview-back" aria-hidden="true"></div>
+      <div class="actual-size-notice" id="actual-size-notice-human">
+        <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+        <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
       </div>
     </div>
   </section>
@@ -900,60 +1230,51 @@
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
-    <div class="preview-ctrl no-print">
+    <div class="hero-head no-print">
+      <div class="hero-title">即時預覽<span>醫療資訊卡 · 74 × 105 mm</span></div>
+      <div class="flip-toggle" role="group" aria-label="切換正反面">
+        <button type="button" class="flip-btn active" data-face="front" onclick="setFace('front')">正面</button>
+        <button type="button" class="flip-btn" data-face="back" onclick="setFace('back')">背面</button>
+      </div>
+    </div>
+    <div class="hero-frame">
+      <span class="hero-num">02</span>
+      <div class="hero-card face-front">
+        <div class="m-wrapper"><div class="medical-card" id="preview-med-front" aria-hidden="true"></div></div>
+      </div>
+      <div class="hero-card face-back">
+        <div class="m-wrapper"><div class="medical-card" id="preview-med-back" aria-hidden="true"></div></div>
+      </div>
+    </div>
+    <div class="hero-meta no-print">
+      <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
       <button class="actual-size-btn" id="actual-size-btn-med" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
-    </div>
-    <div class="actual-size-notice no-print" id="actual-size-notice-med">
-      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
-      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">卡片正面預覽</div>
-      <div class="m-wrapper">
-        <div class="medical-card" id="preview-med-front" aria-hidden="true"></div>
-      </div>
-      <div class="size-hint">
-        <div class="size-comp">
-          <div class="size-comp-item">
-            <div class="size-comp-rect this-card" style="width:28px;height:40px;"></div>
-            <span class="size-comp-label">本卡</span>
-          </div>
-          <span class="size-comp-sep" style="padding-bottom:24px;">|</span>
-          <div class="size-comp-item">
-            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
-            <span class="size-comp-label">悠遊卡</span>
-          </div>
-        </div>
-        <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
-      </div>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">卡片背面預覽</div>
-      <div class="m-wrapper">
-        <div class="medical-card" id="preview-med-back" aria-hidden="true"></div>
+      <div class="actual-size-notice" id="actual-size-notice-med">
+        <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+        <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ════════════ 寵物卡 Tab ════════════ -->
+<!-- ════════════ 動物夥伴卡 Tab ════════════ -->
 <div class="main no-print" id="tab-pet" role="tabpanel" aria-labelledby="tab-btn-pet" hidden>
 
   <aside class="form-panel">
     <div class="pet-handbook-tip">
       <span style="font-size:1.1rem;flex-shrink:0;">📖</span>
-      <span>建議搭配<strong>《動物夥伴防災避難手冊》</strong>使用，讓您與毛孩的避難準備更完整。
+      <span>建議搭配<strong>《動物夥伴防災避難手冊》</strong>使用，讓你與動物夥伴的避難準備更完整。
         <br><a href="https://drive.google.com/file/d/1TA4cQLzIC9qdBmCfgy5ABKAFTOQHdcD5/view" target="_blank" rel="noopener">點此開啟手冊 →</a>
       </span>
     </div>
     <div class="section-title">基本資料</div>
     <div class="field">
-      <label for="pet_photo_input">寵物照片（選填）</label>
+      <label for="pet_photo_input">動物夥伴照片（選填）</label>
       <input type="file" id="pet_photo_input" accept="image/*" onchange="loadPhoto(this,'pet')">
-      <p class="field-hint">上傳後照片會印在卡片上，協助辨識走失寵物。</p>
+      <p class="field-hint">上傳後照片會印在卡片上，協助辨識走失動物夥伴。</p>
     </div>
     <div class="field">
-      <label for="p_name">寵物名字</label>
+      <label for="p_name">動物夥伴名字</label>
       <input type="text" id="p_name" placeholder="小白" oninput="syncPet()">
     </div>
     <div class="field-row">
@@ -990,7 +1311,7 @@
       <p class="field-hint">建議不超過 20 字（約兩行），超出將被截斷。</p>
     </div>
 
-    <div class="section-title">身份辨識</div>
+    <div class="section-title">身分辨識</div>
     <div class="field-row">
       <div class="field">
         <label for="p_chip">晶片</label>
@@ -1027,7 +1348,7 @@
       <div class="med-entry">
         <div class="field">
           <label>健康狀況 1</label>
-          <input type="text" class="f-condition" list="pet-conditions-list" placeholder="腎臟病、過敏、胃腸問題…" oninput="syncPet()">
+          <input type="text" class="f-condition" list="pet-conditions-list" placeholder="腎臟病、過敏、腸胃問題…" oninput="syncPet()">
           <div class="condition-tags">
             <button type="button" class="cond-tag" onclick="pickCondition(this,'腎臟病')">腎臟病</button>
             <button type="button" class="cond-tag" onclick="pickCondition(this,'心臟病')">心臟病</button>
@@ -1239,37 +1560,28 @@
   </aside>
 
   <section class="preview-panel" aria-label="卡片預覽">
-    <div class="preview-ctrl no-print">
+    <div class="hero-head no-print">
+      <div class="hero-title">即時預覽<span>動物夥伴卡 · 74 × 105 mm</span></div>
+      <div class="flip-toggle" role="group" aria-label="切換正反面">
+        <button type="button" class="flip-btn active" data-face="front" onclick="setFace('front')">正面</button>
+        <button type="button" class="flip-btn" data-face="back" onclick="setFace('back')">背面</button>
+      </div>
+    </div>
+    <div class="hero-frame">
+      <span class="hero-num">03</span>
+      <div class="hero-card face-front">
+        <div class="p-wrapper"><div class="pet-card" id="preview-pet-front" aria-hidden="true"></div></div>
+      </div>
+      <div class="hero-card face-back">
+        <div class="p-wrapper"><div class="pet-card" id="preview-pet-back" aria-hidden="true"></div></div>
+      </div>
+    </div>
+    <div class="hero-meta no-print">
+      <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
       <button class="actual-size-btn" id="actual-size-btn-pet" onclick="toggleActualSize()">📏 實際尺寸預覽</button>
-    </div>
-    <div class="actual-size-notice no-print" id="actual-size-notice-pet">
-      <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
-      <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">正面預覽</div>
-      <div class="p-wrapper">
-        <div class="pet-card" id="preview-pet-front" aria-hidden="true"></div>
-      </div>
-      <div class="size-hint">
-        <div class="size-comp">
-          <div class="size-comp-item">
-            <div class="size-comp-rect this-card" style="width:28px;height:40px;"></div>
-            <span class="size-comp-label">本卡</span>
-          </div>
-          <span class="size-comp-sep" style="padding-bottom:24px;">|</span>
-          <div class="size-comp-item">
-            <div class="size-comp-rect ref-card" style="width:33px;height:21px;"></div>
-            <span class="size-comp-label">悠遊卡</span>
-          </div>
-        </div>
-        <div class="size-tag">📐 74 × 105 mm · A7 尺寸，約明信片大小</div>
-      </div>
-    </div>
-    <div class="preview-block">
-      <div class="preview-label">背面預覽</div>
-      <div class="p-wrapper">
-        <div class="pet-card" id="preview-pet-back" aria-hidden="true"></div>
+      <div class="actual-size-notice" id="actual-size-notice-pet">
+        <span>📏 目前為實際印刷尺寸（1:1）— 螢幕已校正</span>
+        <button class="exit-actual-btn" onclick="exitActualSize()">退出</button>
       </div>
     </div>
   </section>
@@ -1313,6 +1625,12 @@
   </div>
 </div>
 
+<!-- ── 行動版：預覽卡片浮動鈕 + 抽屜遮罩 ── -->
+<button class="preview-fab no-print" id="preview-fab" onclick="openPreviewSheet()" aria-label="預覽卡片">
+  <span class="fab-ico"></span>預覽卡片
+</button>
+<div class="preview-backdrop no-print" id="preview-backdrop" onclick="closePreviewSheet()"></div>
+
 <script>
   const $ = id => document.getElementById(id);
   const val = id => { const el = $(id); return el ? el.value.trim() : ''; };
@@ -1321,12 +1639,20 @@
   const TAB_ORDER = ['human', 'med', 'pet'];
   function switchTab(tab) {
     document.body.dataset.tab = tab;
+    if (typeof closePreviewSheet === 'function') closePreviewSheet();
     TAB_ORDER.forEach(t => { const p = $(`tab-${t}`); if (p) p.hidden = (t !== tab); });
     document.querySelectorAll('[role="tab"]').forEach(btn => {
       const active = btn.getAttribute('aria-controls') === `tab-${tab}`;
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-selected', active);
     });
+  }
+
+  // ── 卡片正／反面切換（Hero）──
+  function setFace(face) {
+    document.body.dataset.face = face;
+    document.querySelectorAll('.flip-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.face === face));
   }
 
   // ── Tab 鍵盤導航（方向鍵循環）─────────────────────
@@ -1475,7 +1801,7 @@
     checkOverflow();
   }
 
-  // ── 寵物卡：正面（#4 移除 emoji section title）────
+  // ── 動物夥伴卡：正面（#4 移除 emoji section title）────
   function buildPetFront() {
     const name=val('p_name'), species=val('p_species'), gender=val('p_gender'),
           breed=val('p_breed'), dob=val('p_dob'), desc=val('p_desc'),
@@ -1490,7 +1816,7 @@
     const dobFmt = dob ? `${dob} 年` : '';
     return `
       <div class="card-header">
-        <span class="card-title">寵物個資與健康資料卡</span>
+        <span class="card-title">動物夥伴卡</span>
         <span class="card-side-label">正面</span>
       </div>
       <div class="pet-body">
@@ -1506,10 +1832,10 @@
             ${R('生日', dobFmt)}
             <div class="pet-row" style="align-items:flex-start"><span class="pet-key">外觀</span><span class="pet-val" style="white-space:pre-line;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${PV(desc)}</span></div>
           </div>
-          <div class="pet-photo">${petPhoto ? `<img src="${petPhoto}" alt="寵物照片">` : '貼照片<br><span style="font-size:5pt;color:#aaa">建議含飼主合照</span>'}</div>
+          <div class="pet-photo">${petPhoto ? `<img src="${petPhoto}" alt="動物夥伴照片">` : '貼照片<br><span style="font-size:5pt;color:#aaa">建議含飼主合照</span>'}</div>
         </div>
         <div class="pet-section">
-          <div class="pet-section-title">身份辨識</div>
+          <div class="pet-section-title">身分辨識</div>
           <div class="pet-section-rows">
             <div class="pet-row">
               <span class="pet-key">晶片</span>
@@ -1536,7 +1862,7 @@
       </div>`;
   }
 
-  // ── 寵物卡：背面（#4 移除 emoji section title）────
+  // ── 動物夥伴卡：背面（#4 移除 emoji section title）────
   function buildPetBack() {
     const owner=val('p_owner'), ownerTel=val('p_owner_tel'),
           ownerContact=val('p_owner_contact'), ownerAddr=val('p_owner_addr'),
@@ -1554,7 +1880,7 @@
     const fmt = d => d ? d.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1/$2/$3') : '';
     return `
       <div class="card-header">
-        <span class="card-title">寵物個資與健康資料卡</span>
+        <span class="card-title">動物夥伴卡</span>
         <span class="card-side-label">背面</span>
       </div>
       <div class="pet-body">
@@ -1622,7 +1948,7 @@
       `<span class="pet-val" style="white-space:normal;display:-webkit-box;-webkit-line-clamp:${clamp};-webkit-box-orient:vertical;overflow:hidden;border-bottom:none;">${v||`<em style="color:#bbb">${ph}</em>`}</span>`;
     return `
       <div class="card-header">
-        <span class="card-title">個人醫療資訊卡</span>
+        <span class="card-title">醫療資訊卡</span>
         <span class="card-side-label">正面</span>
       </div>
       <div class="pet-body">
@@ -1675,7 +2001,7 @@
     const cnameRel = [cname, crel?`（${crel})`:''].filter(Boolean).join('');
     return `
       <div class="card-header">
-        <span class="card-title">個人醫療資訊卡</span>
+        <span class="card-title">醫療資訊卡</span>
         <span class="card-side-label">背面</span>
       </div>
       <div class="pet-body">
@@ -1921,11 +2247,11 @@
   function buildPrintPanel(hint) {
     return `
       <div class="privacy-inline">
-        🔒 純前端技術，資料不會離開瀏覽器。<br>
-        關閉視窗後，所有內容即刻消失，不留任何紀錄。
+        🔒 所有資料只在你的裝置上處理，不會上傳。<br>
+        關閉視窗後即刻清除，不留任何紀錄。
       </div>
       <button class="print-btn" onclick="window.print()">🖨️ 列印</button>
-      <button class="download-btn" onclick="downloadBackup()">⬇ 下載備份檔（帶去印刷店）</button>
+      <button class="download-btn" onclick="downloadBackup()">⬇ 下載存檔（下次可重新開啟編輯）</button>
       <div class="print-steps">
         <p class="print-steps-title">列印前請確認：</p>
         <ol>
@@ -1989,8 +2315,105 @@
   }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') dismissOnboard();
+    if (e.key === 'Escape') { dismissOnboard(); closePreviewSheet(); }
   });
+
+  // ── 全頁封面（強烈警示型）邏輯 ──────────────────────
+  const AUD_CARDS = { self: ['human'], medical: ['human', 'med'], pet: ['human', 'pet'] };
+  const CARD_ORDER = ['human', 'med', 'pet'];
+  const coverSel = new Set();
+
+  function coverRecommended() {
+    const set = new Set();
+    coverSel.forEach(a => (AUD_CARDS[a] || []).forEach(c => set.add(c)));
+    return CARD_ORDER.filter(c => set.has(c));
+  }
+
+  function refreshCover() {
+    const rec = coverRecommended();
+    const recSet = new Set(rec);
+    document.querySelectorAll('.cover-card').forEach(card => {
+      const id = card.dataset.card;
+      const on = recSet.has(id);
+      card.classList.toggle('rec', on);
+      let tag = card.querySelector('.cover-rec-tag');
+      if (on && !tag) {
+        tag = document.createElement('span');
+        tag.className = 'cover-rec-tag';
+        tag.textContent = '已推薦';
+        card.appendChild(tag);
+      } else if (!on && tag) {
+        tag.remove();
+      }
+    });
+    const cta = document.getElementById('cover-cta');
+    if (rec.length === 0) {
+      cta.disabled = true;
+      cta.textContent = '請先選擇對象';
+    } else {
+      cta.disabled = false;
+      cta.textContent = `製作 ${rec.length} 張卡 →`;
+    }
+  }
+
+  function toggleAud(btn) {
+    const a = btn.dataset.aud;
+    if (coverSel.has(a)) { coverSel.delete(a); btn.classList.remove('on'); }
+    else { coverSel.add(a); btn.classList.add('on'); }
+    refreshCover();
+  }
+
+  function enterCard(tab) {
+    switchTab(tab);
+    const cover = document.getElementById('cover');
+    cover.classList.add('hidden');
+    document.getElementById('cover').setAttribute('aria-hidden', 'true');
+    const btn = document.getElementById(`tab-btn-${tab}`);
+    if (btn) btn.focus();
+    window.scrollTo(0, 0);
+    showJitHintMaybe();
+  }
+
+  function showJitHintMaybe() {
+    if (localStorage.getItem('safecard-hint-seen')) return;
+    document.getElementById('jit-hint').classList.add('show');
+  }
+  function dismissJitHint() {
+    document.getElementById('jit-hint').classList.remove('show');
+    localStorage.setItem('safecard-hint-seen', '1');
+  }
+
+  function enterRecommended() {
+    const rec = coverRecommended();
+    enterCard(rec[0] || 'human');
+  }
+
+  function showCover() {
+    const cover = document.getElementById('cover');
+    cover.classList.remove('hidden');
+    cover.removeAttribute('aria-hidden');
+    window.scrollTo(0, 0);
+  }
+
+  // ── 行動版預覽抽屜 ──
+  function initPreviewSheet() {
+    document.querySelectorAll('.preview-panel').forEach(panel => {
+      if (panel.querySelector('.sheet-header')) return;
+      const head = document.createElement('div');
+      head.className = 'sheet-header no-print';
+      head.innerHTML = '<span class="sheet-grab"></span>'
+        + '<span class="sheet-title">卡片預覽</span>'
+        + '<button class="sheet-close" onclick="closePreviewSheet()">收合 ✕</button>';
+      panel.insertBefore(head, panel.firstChild);
+      const foot = document.createElement('div');
+      foot.className = 'sheet-footer no-print';
+      foot.innerHTML = '<button class="sheet-print-btn" onclick="window.print()">🖨️ 列印此卡</button>'
+        + '<p class="sheet-print-hint">列印前請確認縮放為「實際大小 / 100%」、紙張 A4 直向</p>';
+      panel.appendChild(foot);
+    });
+  }
+  function openPreviewSheet() { document.body.classList.add('sheet-open'); }
+  function closePreviewSheet() { document.body.classList.remove('sheet-open'); }
 
   function setFontSize(size) {
     const map = { S: '14px', M: '16px', L: '20px' };
@@ -2002,7 +2425,10 @@
     });
   }
   setFontSize(localStorage.getItem('safecard-fontsize') || 'M');
-  initOnboard();
+  // 封面已取代首次引導彈窗，不再自動開啟 onboarding
+  refreshCover();
+  initPreviewSheet();
+  setFace('front');
 
   sync();
   syncPet();
